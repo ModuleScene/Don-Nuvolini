@@ -3,575 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Don nuvolini - Luxury POS</title>
+<title>Maytoki Pizzeria - Luxury POS</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
+<!-- Firebase CDN (versión compat para HTML puro) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
 body{
 background:#0a0a0a;
 color:white;
 font-family:'Poppins',sans-serif;
 min-height:100vh;
-background-image: 
-  radial-gradient(ellipse at top, rgba(212,175,55,0.15), transparent 50%),
-  radial-gradient(ellipse at bottom, rgba(139,69,19,0.2), transparent 50%),
-  url('https://i.postimg.cc/yYrQzzhg/pizza-with-mushrooms-olives-basil-leaves.jpg') center/cover fixed;
+background-image:radial-gradient(ellipse at top,rgba(212,175,55,0.15),transparent 50%),radial-gradient(ellipse at bottom,rgba(139,69,19,0.2),transparent 50%),url('https://i.postimg.cc/yYrQzzhg/pizza-with-mushrooms-olives-basil-leaves.jpg') center/cover fixed;
 position:relative;
 }
-
-body::before{
-content:"";
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(10,10,10,0.85);
-backdrop-filter:blur(8px);
-z-index:-1;
-}
-
-.container{
-display:flex;
-min-height:100vh;
-position:relative;
-}
-
-/* DECORACIÓN SUPERIOR */
-.decor-top{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:3px;
-background:linear-gradient(90deg,transparent,#d4af37,transparent);
-z-index:1000;
-}
-
-/* LADO IZQUIERDO - BRANDING */
-.left{
-flex:1;
-background:linear-gradient(135deg,rgba(0,0,0,0.9),rgba(20,20,20,0.8)),
-url('https://images.unsplash.com/photo-1574126154517-d1e0d89e7344?q=80&w=1000') center/cover;
-display:flex;
-align-items:center;
-justify-content:center;
-position:relative;
-padding:60px 40px;
-border-right:1px solid rgba(212,175,55,0.2);
-}
-
-.left::before{
-content:"";
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:repeating-linear-gradient(
-  45deg,
-  transparent,
-  transparent 10px,
-  rgba(212,175,55,0.03) 10px,
-  rgba(212,175,55,0.03) 20px
-);
-}
-
-.branding{
-text-align:center;
-z-index:2;
-position:relative;
-}
-
-.branding-icon{
-font-size:80px;
-margin-bottom:20px;
-display:block;
-filter:drop-shadow(0 0 20px rgba(212,175,55,0.5));
-}
-
-.branding span{
-font-family:'Great Vibes',cursive;
-font-size:56px;
-color:#d4af37;
-display:block;
-margin-bottom:15px;
-text-shadow:0 0 30px rgba(212,175,55,0.5);
-}
-
-.branding h1{
-font-family:'Playfair Display',serif;
-font-size:72px;
-font-weight:400;
-letter-spacing:8px;
-color:white;
-margin-bottom:20px;
-text-transform:uppercase;
-}
-
-.branding-tagline{
-font-size:14px;
-color:#888;
-letter-spacing:4px;
-text-transform:uppercase;
-border-top:1px solid rgba(212,175,55,0.3);
-border-bottom:1px solid rgba(212,175,55,0.3);
-padding:15px 0;
-display:inline-block;
-padding-left:30px;
-padding-right:30px;
-}
-
-/* LADO DERECHO - SISTEMA */
-.right{
-flex:1.2;
-background:rgba(15,15,15,0.95);
-padding:50px;
-overflow-y:auto;
-max-height:100vh;
-box-shadow:-10px 0 50px rgba(0,0,0,0.5);
-}
-
-/* HEADER ELEGANTE */
-.header-sistema{
-text-align:center;
-margin-bottom:40px;
-padding-bottom:30px;
-border-bottom:2px solid rgba(212,175,55,0.3);
-position:relative;
-}
-
-.header-sistema::after{
-content:"🍕";
-position:absolute;
-bottom:-15px;
-left:50%;
-transform:translateX(-50%);
-background:#0f0f0f;
-padding:0 20px;
-font-size:24px;
-}
-
-.header-sistema h2{
-font-family:'Playfair Display',serif;
-font-size:42px;
-color:#d4af37;
-margin-bottom:10px;
-font-weight:400;
-letter-spacing:3px;
-}
-
-.header-sistema p{
-color:#666;
-font-size:14px;
-letter-spacing:2px;
-text-transform:uppercase;
-}
-
-/* CONTADOR PREMIUM */
-.contador-container{
-text-align:center;
-margin-bottom:40px;
-}
-
-.contador{
-display:inline-flex;
-align-items:center;
-gap:15px;
-background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(212,175,55,0.05));
-border:1px solid rgba(212,175,55,0.4);
-padding:15px 35px;
-border-radius:50px;
-font-weight:500;
-letter-spacing:2px;
-box-shadow:0 8px 30px rgba(212,175,55,0.2),
-inset 0 1px 0 rgba(255,255,255,0.1);
-}
-
-.contador-numero{
-background:linear-gradient(135deg,#d4af37,#f4d03f);
-color:#0a0a0a;
-width:45px;
-height:45px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:700;
-font-size:18px;
-box-shadow:0 4px 15px rgba(212,175,55,0.4);
-}
-
-/* FORMULARIO LUJO */
-.form-group{
-background:linear-gradient(135deg,rgba(30,30,30,0.8),rgba(20,20,20,0.9));
-padding:40px;
-border-radius:20px;
-margin-bottom:40px;
-border:1px solid rgba(212,175,55,0.2);
-box-shadow:0 10px 40px rgba(0,0,0,0.4),
-inset 0 1px 0 rgba(255,255,255,0.05);
-position:relative;
-overflow:hidden;
-}
-
-.form-group::before{
-content:"";
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:3px;
-background:linear-gradient(90deg,transparent,#d4af37,transparent);
-}
-
-.form-row{
-margin-bottom:25px;
-}
-
-.form-group label{
-display:block;
-color:#d4af37;
-margin-bottom:12px;
-font-size:12px;
-text-transform:uppercase;
-letter-spacing:3px;
-font-weight:500;
-}
-
-select, textarea{
-width:100%;
-padding:18px 25px;
-background:rgba(10,10,10,0.6);
-border:1px solid rgba(212,175,55,0.2);
-color:white;
-border-radius:12px;
-font-size:15px;
-font-family:'Poppins',sans-serif;
-transition:all 0.3s ease;
-}
-
-select:focus, textarea:focus{
-border-color:#d4af37;
-outline:none;
-box-shadow:0 0 20px rgba(212,175,55,0.2),
-inset 0 1px 0 rgba(255,255,255,0.05);
-background:rgba(10,10,10,0.8);
-}
-
-select option{
-background:#1a1a1a;
-color:white;
-}
-
-/* BOTÓN PREMIUM */
-.btn-enviar{
-width:100%;
-padding:20px;
-background:linear-gradient(135deg,#d4af37,#f4d03f);
-border:none;
-border-radius:12px;
-font-size:16px;
-font-weight:600;
-color:#0a0a0a;
-cursor:pointer;
-transition:all 0.3s ease;
-text-transform:uppercase;
-letter-spacing:3px;
-position:relative;
-overflow:hidden;
-box-shadow:0 8px 25px rgba(212,175,55,0.3);
-}
-
-.btn-enviar::before{
-content:"";
-position:absolute;
-top:0;
-left:-100%;
-width:100%;
-height:100%;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);
-transition:left 0.5s;
-}
-
-.btn-enviar:hover::before{
-left:100%;
-}
-
-.btn-enviar:hover{
-transform:translateY(-3px);
-box-shadow:0 12px 35px rgba(212,175,55,0.5);
-}
-
-.btn-enviar:active{
-transform:translateY(-1px);
-}
-
-/* SECCIONES */
-.seccion-pedidos{
-margin-top:50px;
-}
-
-.titulo-seccion{
-font-family:'Playfair Display',serif;
-font-size:28px;
-color:#d4af37;
-margin-bottom:25px;
-display:flex;
-align-items:center;
-gap:15px;
-font-weight:400;
-}
-
-.titulo-seccion::before,
-.titulo-seccion::after{
-content:"";
-flex:1;
-height:1px;
-background:linear-gradient(90deg,transparent,rgba(212,175,55,0.4),transparent);
-}
-
-/* TARJETAS DE PEDIDO */
-.pedido-item{
-background:linear-gradient(135deg,rgba(30,30,30,0.9),rgba(20,20,20,0.95));
-padding:30px;
-border-radius:15px;
-margin-bottom:20px;
-border:1px solid rgba(212,175,55,0.2);
-box-shadow:0 8px 30px rgba(0,0,0,0.4);
-transition:all 0.3s ease;
-position:relative;
-overflow:hidden;
-}
-
-.pedido-item::before{
-content:"";
-position:absolute;
-top:0;
-left:0;
-width:5px;
-height:100%;
-background:linear-gradient(180deg,#d4af37,#f4d03f);
-box-shadow:0 0 20px rgba(212,175,55,0.5);
-}
-
-.pedido-item:hover{
-transform:translateX(8px);
-box-shadow:0 12px 40px rgba(212,175,55,0.15),
-0 8px 30px rgba(0,0,0,0.4);
-border-color:rgba(212,175,55,0.4);
-}
-
-.pedido-item.entregado{
-opacity:0.7;
-border-color:rgba(46,204,113,0.3);
-}
-
-.pedido-item.entregado::before{
-background:linear-gradient(180deg,#2ecc71,#27ae60);
-box-shadow:0 0 20px rgba(46,204,113,0.5);
-}
-
-.pedido-item.rojo{
-border-color:rgba(231,76,60,0.5);
-animation:pulse-luxury 2s infinite;
-}
-
-.pedido-item.rojo::before{
-background:linear-gradient(180deg,#e74c3c,#c0392b);
-box-shadow:0 0 20px rgba(231,76,60,0.6);
-}
-
-@keyframes pulse-luxury{
-0%,100%{box-shadow:0 8px 30px rgba(0,0,0,0.4);}
-50%{box-shadow:0 8px 40px rgba(231,76,60,0.3),0 0 30px rgba(231,76,60,0.2);}
-}
-
-.pedido-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:15px;
-padding-bottom:15px;
-border-bottom:1px solid rgba(212,175,55,0.2);
-}
-
-.pedido-mesa{
-font-family:'Playfair Display',serif;
-font-size:24px;
-color:#d4af37;
-font-weight:600;
-letter-spacing:2px;
-}
-
-.pedido-hora{
-color:#666;
-font-size:13px;
-letter-spacing:1px;
-background:rgba(212,175,55,0.1);
-padding:5px 15px;
-border-radius:20px;
-}
-
-/* LISTA DE PEDIDOS */
-.pedido-lista{
-margin-bottom:20px;
-}
-
-.lista-item{
-color:#bbb;
-padding:10px 15px;
-margin-bottom:8px;
-background:rgba(212,175,55,0.05);
-border-left:3px solid #d4af37;
-border-radius:5px;
-font-size:15px;
-line-height:1.6;
-transition:all 0.3s;
-}
-
-.lista-item:hover{
-background:rgba(212,175,55,0.1);
-padding-left:20px;
-}
-
-.pedido-actions{
-display:flex;
-gap:12px;
-flex-wrap:wrap;
-}
-
-.btn{
-padding:12px 25px;
-border:none;
-border-radius:8px;
-font-size:13px;
-font-weight:600;
-cursor:pointer;
-transition:all 0.3s ease;
-text-transform:uppercase;
-letter-spacing:1.5px;
-position:relative;
-overflow:hidden;
-}
-
-.btn-entregado{
-background:linear-gradient(135deg,#2ecc71,#27ae60);
-color:white;
-box-shadow:0 4px 15px rgba(46,204,113,0.3);
-}
-
-.btn-entregado:hover{
-transform:translateY(-2px);
-box-shadow:0 6px 20px rgba(46,204,113,0.4);
-}
-
-.btn-alerta{
-background:linear-gradient(135deg,#e74c3c,#c0392b);
-color:white;
-box-shadow:0 4px 15px rgba(231,76,60,0.3);
-}
-
-.btn-alerta:hover{
-transform:translateY(-2px);
-box-shadow:0 6px 20px rgba(231,76,60,0.4);
-}
-
-.btn-eliminar{
-background:transparent;
-border:1px solid rgba(255,255,255,0.2);
-color:#666;
-}
-
-.btn-eliminar:hover{
-background:rgba(231,76,60,0.1);
-border-color:#e74c3c;
-color:#e74c3c;
-}
-
-.btn-vaciar{
-background:transparent;
-border:1px solid rgba(212,175,55,0.4);
-color:#d4af37;
-padding:15px 30px;
-margin-bottom:25px;
-font-size:13px;
-letter-spacing:2px;
-}
-
-.btn-vaciar:hover{
-background:rgba(212,175,55,0.1);
-border-color:#d4af37;
-box-shadow:0 4px 15px rgba(212,175,55,0.2);
-}
-
-/* ALERTA */
-.alerta{
-animation:flash-luxury 0.4s alternate 4;
-}
-
-@keyframes flash-luxury{
-from{background:rgba(10,10,10,0.95);}
-to{background:rgba(30,15,15,0.95);}
-}
-
-/* SCROLLBAR ELEGANTE */
-.right::-webkit-scrollbar{
-width:10px;
-}
-
-.right::-webkit-scrollbar-track{
-background:rgba(10,10,10,0.5);
-}
-
-.right::-webkit-scrollbar-thumb{
-background:linear-gradient(180deg,#d4af37,#b8941f);
-border-radius:5px;
-border:2px solid rgba(10,10,10,0.8);
-}
-
-.right::-webkit-scrollbar-thumb:hover{
-background:linear-gradient(180deg,#f4d03f,#d4af37);
-}
-
-/* RESPONSIVE */
-@media(max-width:1024px){
-.container{flex-direction:column}
-.left{min-height:350px;border-right:none;border-bottom:1px solid rgba(212,175,55,0.2)}
-.branding h1{font-size:48px}
-.branding span{font-size:42px}
-.right{padding:35px}
-}
-
-@media(max-width:600px){
-.branding h1{font-size:36px;letter-spacing:4px}
-.header-sistema h2{font-size:32px}
-.form-group{padding:25px}
-.pedido-item{padding:20px}
-}
+body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,10,0.85);backdrop-filter:blur(8px);z-index:-1;}
+.container{display:flex;min-height:100vh;position:relative;}
+.decor-top{position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,transparent,#d4af37,transparent);z-index:1000;}
+.left{flex:1;background:linear-gradient(135deg,rgba(0,0,0,0.9),rgba(20,20,20,0.8)),url('https://images.unsplash.com/photo-1574126154517-d1e0d89e7344?q=80&w=1000') center/cover;display:flex;align-items:center;justify-content:center;position:relative;padding:60px 40px;border-right:1px solid rgba(212,175,55,0.2);}
+.left::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(212,175,55,0.03) 10px,rgba(212,175,55,0.03) 20px);}
+.branding{text-align:center;z-index:2;position:relative;}
+.branding-icon{font-size:80px;margin-bottom:20px;display:block;filter:drop-shadow(0 0 20px rgba(212,175,55,0.5));}
+.branding span{font-family:'Great Vibes',cursive;font-size:56px;color:#d4af37;display:block;margin-bottom:15px;text-shadow:0 0 30px rgba(212,175,55,0.5);}
+.branding h1{font-family:'Playfair Display',serif;font-size:72px;font-weight:400;letter-spacing:8px;color:white;margin-bottom:20px;text-transform:uppercase;}
+.branding-tagline{font-size:14px;color:#888;letter-spacing:4px;text-transform:uppercase;border-top:1px solid rgba(212,175,55,0.3);border-bottom:1px solid rgba(212,175,55,0.3);padding:15px 0;display:inline-block;padding-left:30px;padding-right:30px;}
+.right{flex:1.2;background:rgba(15,15,15,0.95);padding:50px;overflow-y:auto;max-height:100vh;box-shadow:-10px 0 50px rgba(0,0,0,0.5);}
+.header-sistema{text-align:center;margin-bottom:40px;padding-bottom:30px;border-bottom:2px solid rgba(212,175,55,0.3);position:relative;}
+.header-sistema::after{content:"🍕";position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);background:#0f0f0f;padding:0 20px;font-size:24px;}
+.header-sistema h2{font-family:'Playfair Display',serif;font-size:42px;color:#d4af37;margin-bottom:10px;font-weight:400;letter-spacing:3px;}
+.header-sistema p{color:#666;font-size:14px;letter-spacing:2px;text-transform:uppercase;}
+.contador-container{text-align:center;margin-bottom:40px;}
+.contador{display:inline-flex;align-items:center;gap:15px;background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(212,175,55,0.05));border:1px solid rgba(212,175,55,0.4);padding:15px 35px;border-radius:50px;font-weight:500;letter-spacing:2px;box-shadow:0 8px 30px rgba(212,175,55,0.2),inset 0 1px 0 rgba(255,255,255,0.1);}
+.contador-numero{background:linear-gradient(135deg,#d4af37,#f4d03f);color:#0a0a0a;width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;box-shadow:0 4px 15px rgba(212,175,55,0.4);}
+.form-group{background:linear-gradient(135deg,rgba(30,30,30,0.8),rgba(20,20,20,0.9));padding:40px;border-radius:20px;margin-bottom:40px;border:1px solid rgba(212,175,55,0.2);box-shadow:0 10px 40px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.05);position:relative;overflow:hidden;}
+.form-group::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,transparent,#d4af37,transparent);}
+.form-row{margin-bottom:25px;}
+.form-group label{display:block;color:#d4af37;margin-bottom:12px;font-size:12px;text-transform:uppercase;letter-spacing:3px;font-weight:500;}
+select,textarea{width:100%;padding:18px 25px;background:rgba(10,10,10,0.6);border:1px solid rgba(212,175,55,0.2);color:white;border-radius:12px;font-size:15px;font-family:'Poppins',sans-serif;transition:all 0.3s ease;}
+select:focus,textarea:focus{border-color:#d4af37;outline:none;box-shadow:0 0 20px rgba(212,175,55,0.2),inset 0 1px 0 rgba(255,255,255,0.05);background:rgba(10,10,10,0.8);}
+select option{background:#1a1a1a;color:white;}
+.btn-enviar{width:100%;padding:20px;background:linear-gradient(135deg,#d4af37,#f4d03f);border:none;border-radius:12px;font-size:16px;font-weight:600;color:#0a0a0a;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:3px;position:relative;overflow:hidden;box-shadow:0 8px 25px rgba(212,175,55,0.3);}
+.btn-enviar::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left 0.5s;}
+.btn-enviar:hover::before{left:100%;}
+.btn-enviar:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(212,175,55,0.5);}
+.btn-enviar:active{transform:translateY(-1px);}
+.seccion-pedidos{margin-top:50px;}
+.titulo-seccion{font-family:'Playfair Display',serif;font-size:28px;color:#d4af37;margin-bottom:25px;display:flex;align-items:center;gap:15px;font-weight:400;}
+.titulo-seccion::before,.titulo-seccion::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.4),transparent);}
+.pedido-item{background:linear-gradient(135deg,rgba(30,30,30,0.9),rgba(20,20,20,0.95));padding:30px;border-radius:15px;margin-bottom:20px;border:1px solid rgba(212,175,55,0.2);box-shadow:0 8px 30px rgba(0,0,0,0.4);transition:all 0.3s ease;position:relative;overflow:hidden;}
+.pedido-item::before{content:"";position:absolute;top:0;left:0;width:5px;height:100%;background:linear-gradient(180deg,#d4af37,#f4d03f);box-shadow:0 0 20px rgba(212,175,55,0.5);}
+.pedido-item:hover{transform:translateX(8px);box-shadow:0 12px 40px rgba(212,175,55,0.15),0 8px 30px rgba(0,0,0,0.4);border-color:rgba(212,175,55,0.4);}
+.pedido-item.entregado{opacity:0.7;border-color:rgba(46,204,113,0.3);}
+.pedido-item.entregado::before{background:linear-gradient(180deg,#2ecc71,#27ae60);box-shadow:0 0 20px rgba(46,204,113,0.5);}
+.pedido-item.rojo{border-color:rgba(231,76,60,0.5);animation:pulse-luxury 2s infinite;}
+.pedido-item.rojo::before{background:linear-gradient(180deg,#e74c3c,#c0392b);box-shadow:0 0 20px rgba(231,76,60,0.6);}
+@keyframes pulse-luxury{0%,100%{box-shadow:0 8px 30px rgba(0,0,0,0.4);}50%{box-shadow:0 8px 40px rgba(231,76,60,0.3),0 0 30px rgba(231,76,60,0.2);}}
+.pedido-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid rgba(212,175,55,0.2);}
+.pedido-mesa{font-family:'Playfair Display',serif;font-size:24px;color:#d4af37;font-weight:600;letter-spacing:2px;}
+.pedido-hora{color:#666;font-size:13px;letter-spacing:1px;background:rgba(212,175,55,0.1);padding:5px 15px;border-radius:20px;}
+.pedido-lista{margin-bottom:20px;}
+.lista-item{color:#bbb;padding:10px 15px;margin-bottom:8px;background:rgba(212,175,55,0.05);border-left:3px solid #d4af37;border-radius:5px;font-size:15px;line-height:1.6;transition:all 0.3s;}
+.lista-item:hover{background:rgba(212,175,55,0.1);padding-left:20px;}
+.pedido-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{padding:12px 25px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:1.5px;position:relative;overflow:hidden;}
+.btn-entregado{background:linear-gradient(135deg,#2ecc71,#27ae60);color:white;box-shadow:0 4px 15px rgba(46,204,113,0.3);}
+.btn-entregado:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(46,204,113,0.4);}
+.btn-alerta{background:linear-gradient(135deg,#e74c3c,#c0392b);color:white;box-shadow:0 4px 15px rgba(231,76,60,0.3);}
+.btn-alerta:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(231,76,60,0.4);}
+.btn-eliminar{background:transparent;border:1px solid rgba(255,255,255,0.2);color:#666;}
+.btn-eliminar:hover{background:rgba(231,76,60,0.1);border-color:#e74c3c;color:#e74c3c;}
+.btn-vaciar{background:transparent;border:1px solid rgba(212,175,55,0.4);color:#d4af37;padding:15px 30px;margin-bottom:25px;font-size:13px;letter-spacing:2px;}
+.btn-vaciar:hover{background:rgba(212,175,55,0.1);border-color:#d4af37;box-shadow:0 4px 15px rgba(212,175,55,0.2);}
+.alerta{animation:flash-luxury 0.4s alternate 4;}
+@keyframes flash-luxury{from{background:rgba(10,10,10,0.95);}to{background:rgba(30,15,15,0.95);}}
+.right::-webkit-scrollbar{width:10px;}
+.right::-webkit-scrollbar-track{background:rgba(10,10,10,0.5);}
+.right::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#d4af37,#b8941f);border-radius:5px;border:2px solid rgba(10,10,10,0.8);}
+.right::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#f4d03f,#d4af37);}
+@media(max-width:1024px){.container{flex-direction:column}.left{min-height:350px;border-right:none;border-bottom:1px solid rgba(212,175,55,0.2)}.branding h1{font-size:48px}.branding span{font-size:42px}.right{padding:35px}}
+@media(max-width:600px){.branding h1{font-size:36px;letter-spacing:4px}.header-sistema h2{font-size:32px}.form-group{padding:25px}.pedido-item{padding:20px}}
+.connection-status{position:fixed;top:10px;right:10px;padding:8px 15px;border-radius:20px;font-size:12px;font-weight:600;z-index:10000;}
+.connected{background:rgba(46,204,113,0.9);color:white;}
+.disconnected{background:rgba(231,76,60,0.9);color:white;}
 </style>
 </head>
-
 <body>
 
 <div class="decor-top"></div>
+<div id="connectionStatus" class="connection-status disconnected">Conectando...</div>
 
 <div class="container">
-
 <div class="left">
 <div class="branding">
 <span class="branding-icon">🍕</span>
 <span>Authentic Italian</span>
-<h1>Don nuvolini</h1>
-<div class="branding-tagline">Pizzas & Pastas</div>
+<h1>Maytoki</h1>
+<div class="branding-tagline">Pizzeria & Ristorante</div>
 </div>
 </div>
 
 <div class="right">
-
 <div class="header-sistema">
 <h2>Sistema de Pedidos</h2>
 <p>Gestión Premium de Mesas</p>
@@ -597,15 +132,11 @@ background:linear-gradient(180deg,#f4d03f,#d4af37);
 <option value="Mesa 7">Mesa 7 - Standard</option>
 </select>
 </div>
-
 <div class="form-row">
 <label>Detalle del Pedido</label>
 <textarea id="pedido" rows="4" placeholder="Ej: Pizza Margarita&#10;Coca-Cola&#10;Galletas"></textarea>
 </div>
-
-<button class="btn-enviar" onclick="enviarPedido()">
-✦ Enviar Pedido 
-</button>
+<button class="btn-enviar" onclick="enviarPedido()">✦ Enviar Pedido</button>
 </div>
 
 <div class="seccion-pedidos">
@@ -618,143 +149,151 @@ background:linear-gradient(180deg,#f4d03f,#d4af37);
 <button class="btn btn-vaciar" onclick="vaciarEntregados()">Limpiar Historial</button>
 <div id="listaEntregados"></div>
 </div>
-
 </div>
 </div>
 
 <script>
-let pedidosPendientes = JSON.parse(localStorage.getItem("pendientes")) || [];
-let pedidosEntregados = JSON.parse(localStorage.getItem("entregados")) || [];
+// ✅ CONFIGURACIÓN DE FIREBASE CON TUS CREDENCIALES
+const firebaseConfig = {
+  apiKey: "AIzaSyDeyW0gz8xiCtuoBY6XWm1KKJ1CuXtNNf0",
+  authDomain: "pizza-4f11f.firebaseapp.com",
+  databaseURL: "https://pizza-4f11f-default-rtdb.firebaseio.com",
+  projectId: "pizza-4f11f",
+  storageBucket: "pizza-4f11f.firebasestorage.app",
+  messagingSenderId: "170288514949",
+  appId: "1:170288514949:web:9439795f682d856df966ec",
+  measurementId: "G-RG8ZR2L56B"
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// Referencias a la base de datos
+const pedidosPendientesRef = database.ref('pedidosPendientes');
+const pedidosEntregadosRef = database.ref('pedidosEntregados');
 
 let sonido = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+let ultimoPedidoConocido = null;
 
 function reproducirAlerta(){
-sonido.play();
-setTimeout(()=>sonido.play(),800);
-setTimeout(()=>sonido.play(),1600);
-
-if(navigator.vibrate){
-navigator.vibrate([300,200,300]);
-}
-
-document.body.classList.add("alerta");
-setTimeout(()=>document.body.classList.remove("alerta"),1500);
-}
-
-function guardar(){
-localStorage.setItem("pendientes", JSON.stringify(pedidosPendientes));
-localStorage.setItem("entregados", JSON.stringify(pedidosEntregados));
+  sonido.currentTime = 0;
+  sonido.play().catch(e => console.log("Audio requiere interacción del usuario"));
+  if(navigator.vibrate) navigator.vibrate([300,200,300]);
+  document.body.classList.add("alerta");
+  setTimeout(()=>document.body.classList.remove("alerta"),1500);
 }
 
 function parsearPedido(texto){
-return texto.split(/[\n,]+/).map(item => item.trim()).filter(item => item.length > 0);
+  return texto.split(/[\n,]+/).map(item => item.trim()).filter(item => item.length > 0);
 }
 
 function enviarPedido(){
-let mesa=document.getElementById("mesa").value;
-let texto=document.getElementById("pedido").value;
-
-if(texto.trim()===""){
-alert("Por favor, escriba el pedido");
-return;
-}
-
-let items=parsearPedido(texto);
-
-let nuevo={
-id:Date.now(),
-mesa:mesa,
-items:items,
-hora:new Date().toLocaleTimeString(),
-timestamp:Date.now()
-};
-
-pedidosPendientes.push(nuevo);
-guardar();
-render();
-reproducirAlerta();
-
-document.getElementById("pedido").value="";
+  let mesa = document.getElementById("mesa").value;
+  let texto = document.getElementById("pedido").value;
+  if(texto.trim() === ""){ alert("Por favor, escriba el pedido"); return; }
+  let items = parsearPedido(texto);
+  let nuevoPedido = { mesa, items, hora: new Date().toLocaleTimeString(), timestamp: Date.now(), estado: "pendiente" };
+  
+  pedidosPendientesRef.push(nuevoPedido)
+    .then(() => {
+      console.log("✅ Pedido enviado");
+      document.getElementById("pedido").value = "";
+      reproducirAlerta();
+    })
+    .catch(error => {
+      console.error("❌ Error:", error);
+      alert("Error de conexión. Revisa tu internet.");
+    });
 }
 
 function marcarEntregado(id){
-let index=pedidosPendientes.findIndex(p=>p.id===id);
-if(index!==-1){
-let pedido=pedidosPendientes.splice(index,1)[0];
-pedidosEntregados.push(pedido);
-guardar();
-render();
-}
+  pedidosPendientesRef.child(id).once('value').then(snapshot => {
+    let pedido = snapshot.val();
+    if(pedido){
+      pedidosEntregadosRef.push(pedido).then(() => pedidosPendientesRef.child(id).remove());
+    }
+  });
 }
 
-function eliminarEntregado(id){
-pedidosEntregados=pedidosEntregados.filter(p=>p.id!==id);
-guardar();
-render();
-}
+function eliminarEntregado(id){ pedidosEntregadosRef.child(id).remove(); }
 
 function vaciarEntregados(){
-if(confirm("¿Desea limpiar el historial de pedidos completados?")){
-pedidosEntregados=[];
-guardar();
-render();
-}
+  if(confirm("¿Limpiar historial de completados?")){
+    pedidosEntregadosRef.remove();
+  }
 }
 
-function render(){
-let lista=document.getElementById("listaPedidos");
-lista.innerHTML="";
-let ahora=Date.now();
+function renderPendientes(pedidos){
+  let lista = document.getElementById("listaPedidos");
+  lista.innerHTML = "";
+  let ahora = Date.now(), contador = 0;
+  
+  pedidos.forEach(snapshot => {
+    let p = snapshot.val(), id = snapshot.key; contador++;
+    let tiempo = (ahora - p.timestamp) / 60000;
+    let div = document.createElement("div");
+    div.classList.add("pedido-item");
+    if(tiempo > 5) div.classList.add("rojo");
+    
+    div.innerHTML = `
+      <div class="pedido-header">
+        <span class="pedido-mesa">${p.mesa}</span>
+        <span class="pedido-hora">${p.hora}</span>
+      </div>
+      <div class="pedido-lista">${p.items.map(item => `<div class="lista-item">${item}</div>`).join('')}</div>
+      <div class="pedido-actions">
+        <button class="btn btn-entregado" onclick="marcarEntregado('${id}')">✓ Completado</button>
+        <button class="btn btn-alerta" onclick="reproducirAlerta()">🔔 Alertar</button>
+      </div>`;
+    lista.appendChild(div);
+  });
+  document.getElementById("contador").innerText = contador;
+}
 
-pedidosPendientes.forEach(p=>{
-let tiempo=(ahora-p.timestamp)/60000;
-let div=document.createElement("div");
-div.classList.add("pedido-item");
-if(tiempo>5){div.classList.add("rojo");}
+function renderEntregados(pedidos){
+  let entregadosDiv = document.getElementById("listaEntregados");
+  entregadosDiv.innerHTML = "";
+  pedidos.forEach(snapshot => {
+    let p = snapshot.val(), id = snapshot.key;
+    let div = document.createElement("div");
+    div.classList.add("pedido-item","entregado");
+    div.innerHTML = `
+      <div class="pedido-header">
+        <span class="pedido-mesa">${p.mesa}</span>
+        <span class="pedido-hora">${p.hora}</span>
+      </div>
+      <div class="pedido-lista">${p.items.map(item => `<div class="lista-item">${item}</div>`).join('')}</div>
+      <div class="pedido-actions">
+        <button class="btn btn-eliminar" onclick="eliminarEntregado('${id}')">Eliminar</button>
+      </div>`;
+    entregadosDiv.appendChild(div);
+  });
+}
 
-div.innerHTML=`
-<div class="pedido-header">
-<span class="pedido-mesa">${p.mesa}</span>
-<span class="pedido-hora">${p.hora}</span>
-</div>
-<div class="pedido-lista">
-${p.items.map(item => `<div class="lista-item">${item}</div>`).join('')}
-</div>
-<div class="pedido-actions">
-<button class="btn btn-entregado" onclick="marcarEntregado(${p.id})">✓ Completado</button>
-<button class="btn btn-alerta" onclick="reproducirAlerta()">🔔 Alertar</button>
-</div>
-`;
-
-lista.appendChild(div);
+// 🔁 ESCUCHA EN TIEMPO REAL
+pedidosPendientesRef.on('value', snapshot => {
+  let pedidos = []; snapshot.forEach(s => pedidos.push(s));
+  renderPendientes(pedidos); actualizarEstadoConexion(true);
 });
 
-document.getElementById("contador").innerText=pedidosPendientes.length;
-
-let entregadosDiv=document.getElementById("listaEntregados");
-entregadosDiv.innerHTML="";
-pedidosEntregados.forEach(p=>{
-let div=document.createElement("div");
-div.classList.add("pedido-item","entregado");
-div.innerHTML=`
-<div class="pedido-header">
-<span class="pedido-mesa">${p.mesa}</span>
-<span class="pedido-hora">${p.hora}</span>
-</div>
-<div class="pedido-lista">
-${p.items.map(item => `<div class="lista-item">${item}</div>`).join('')}
-</div>
-<div class="pedido-actions">
-<button class="btn btn-eliminar" onclick="eliminarEntregado(${p.id})">Eliminar</button>
-</div>
-`;
-entregadosDiv.appendChild(div);
+pedidosEntregadosRef.on('value', snapshot => {
+  let pedidos = []; snapshot.forEach(s => pedidos.push(s));
+  renderEntregados(pedidos);
 });
+
+pedidosPendientesRef.on('child_added', snapshot => {
+  if(ultimoPedidoConocido && snapshot.key !== ultimoPedidoConocido) reproducirAlerta();
+  ultimoPedidoConocido = snapshot.key;
+});
+
+function actualizarEstadoConexion(conectado){
+  let status = document.getElementById("connectionStatus");
+  status.className = "connection-status " + (conectado ? "connected" : "disconnected");
+  status.innerText = conectado ? "● Conectado" : "● Desconectado";
 }
 
-setInterval(render,60000);
-render();
+database.ref('.info/connected').on('value', s => actualizarEstadoConexion(s.val() === true));
 </script>
-
 </body>
 </html>

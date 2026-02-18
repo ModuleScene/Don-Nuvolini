@@ -8,65 +8,194 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:white;font-family:'Poppins',sans-serif;min-height:100vh;background-image:radial-gradient(ellipse at top,rgba(212,175,55,0.15),transparent 50%),radial-gradient(ellipse at bottom,rgba(139,69,19,0.2),transparent 50%),url('https://i.postimg.cc/yYrQzzhg/pizza-with-mushrooms-olives-basil-leaves.jpg') center/cover fixed;position:relative}body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,10,0.85);backdrop-filter:blur(8px);z-index:-1}.container{display:flex;min-height:100vh;position:relative}.decor-top{position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,transparent,#d4af37,transparent);z-index:1000}.left{flex:1;background:linear-gradient(135deg,rgba(0,0,0,0.9),rgba(20,20,20,0.8)),url('https://images.unsplash.com/photo-1574126154517-d1e0d89e7344?q=80&w=1000') center/cover;display:flex;align-items:center;justify-content:center;position:relative;padding:60px 40px;border-right:1px solid rgba(212,175,55,0.2)}.left::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(212,175,55,0.03) 10px,rgba(212,175,55,0.03) 20px)}.branding{text-align:center;z-index:2;position:relative}.branding-icon{font-size:80px;margin-bottom:20px;display:block;filter:drop-shadow(0 0 20px rgba(212,175,55,0.5))}.branding span{font-family:'Great Vibes',cursive;font-size:56px;color:#d4af37;display:block;margin-bottom:15px;text-shadow:0 0 30px rgba(212,175,55,0.5)}.branding h1{font-family:'Playfair Display',serif;font-size:72px;font-weight:400;letter-spacing:8px;color:white;margin-bottom:20px;text-transform:uppercase}.branding-tagline{font-size:14px;color:#888;letter-spacing:4px;text-transform:uppercase;border-top:1px solid rgba(212,175,55,0.3);border-bottom:1px solid rgba(212,175,55,0.3);padding:15px 0;display:inline-block;padding-left:30px;padding-right:30px}.right{flex:1.2;background:rgba(15,15,15,0.95);padding:50px;overflow-y:auto;max-height:100vh;box-shadow:-10px 0 50px rgba(0,0,0,0.5)}.header-sistema{text-align:center;margin-bottom:40px;padding-bottom:30px;border-bottom:2px solid rgba(212,175,55,0.3);position:relative}.header-sistema::after{content:"🍕";position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);background:#0f0f0f;padding:0 20px;font-size:24px}.header-sistema h2{font-family:'Playfair Display',serif;font-size:42px;color:#d4af37;margin-bottom:10px;font-weight:400;letter-spacing:3px}.header-sistema p{color:#666;font-size:14px;letter-spacing:2px;text-transform:uppercase}.contador-container{text-align:center;margin-bottom:40px}.contador{display:inline-flex;align-items:center;gap:15px;background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(212,175,55,0.05));border:1px solid rgba(212,175,55,0.4);padding:15px 35px;border-radius:50px;font-weight:500;letter-spacing:2px;box-shadow:0 8px 30px rgba(212,175,55,0.2),inset 0 1px 0 rgba(255,255,255,0.1)}.contador-numero{background:linear-gradient(135deg,#d4af37,#f4d03f);color:#0a0a0a;width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;box-shadow:0 4px 15px rgba(212,175,55,0.4)}.form-group{background:linear-gradient(135deg,rgba(30,30,30,0.8),rgba(20,20,20,0.9));padding:40px;border-radius:20px;margin-bottom:40px;border:1px solid rgba(212,175,55,0.2);box-shadow:0 10px 40px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.05);position:relative;overflow:hidden}.form-group::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,transparent,#d4af37,transparent)}.form-row{margin-bottom:25px}.form-group label{display:block;color:#d4af37;margin-bottom:12px;font-size:12px;text-transform:uppercase;letter-spacing:3px;font-weight:500}select,textarea{width:100%;padding:18px 25px;background:rgba(10,10,10,0.6);border:1px solid rgba(212,175,55,0.2);color:white;border-radius:12px;font-size:15px;font-family:'Poppins',sans-serif;transition:all 0.3s ease}select:focus,textarea:focus{border-color:#d4af37;outline:none;box-shadow:0 0 20px rgba(212,175,55,0.2),inset 0 1px 0 rgba(255,255,255,0.05);background:rgba(10,10,10,0.8)}select option{background:#1a1a1a;color:white}.btn-enviar{width:100%;padding:20px;background:linear-gradient(135deg,#d4af37,#f4d03f);border:none;border-radius:12px;font-size:16px;font-weight:600;color:#0a0a0a;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:3px;position:relative;overflow:hidden;box-shadow:0 8px 25px rgba(212,175,55,0.3)}.btn-enviar::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left 0.5s}.btn-enviar:hover::before{left:100%}.btn-enviar:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(212,175,55,0.5)}.btn-enviar:active{transform:translateY(-1px)}.seccion-pedidos{margin-top:50px}.titulo-seccion{font-family:'Playfair Display',serif;font-size:28px;color:#d4af37;margin-bottom:25px;display:flex;align-items:center;gap:15px;font-weight:400}.titulo-seccion::before,.titulo-seccion::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.4),transparent)}.pedido-item{background:linear-gradient(135deg,rgba(30,30,30,0.9),rgba(20,20,20,0.95));padding:30px;border-radius:15px;margin-bottom:20px;border:1px solid rgba(212,175,55,0.2);box-shadow:0 8px 30px rgba(0,0,0,0.4);transition:all 0.3s ease;position:relative;overflow:hidden}.pedido-item::before{content:"";position:absolute;top:0;left:0;width:5px;height:100%;background:linear-gradient(180deg,#d4af37,#f4d03f);box-shadow:0 0 20px rgba(212,175,55,0.5)}.pedido-item:hover{transform:translateX(8px);box-shadow:0 12px 40px rgba(212,175,55,0.15),0 8px 30px rgba(0,0,0,0.4);border-color:rgba(212,175,55,0.4)}.pedido-item.entregado{opacity:0.7;border-color:rgba(46,204,113,0.3)}.pedido-item.entregado::before{background:linear-gradient(180deg,#2ecc71,#27ae60);box-shadow:0 0 20px rgba(46,204,113,0.5)}.pedido-item.rojo{border-color:rgba(231,76,60,0.5);animation:pulse-luxury 2s infinite}.pedido-item.rojo::before{background:linear-gradient(180deg,#e74c3c,#c0392b);box-shadow:0 0 20px rgba(231,76,60,0.6)}@keyframes pulse-luxury{0%,100%{box-shadow:0 8px 30px rgba(0,0,0,0.4)}50%{box-shadow:0 8px 40px rgba(231,76,60,0.3),0 0 30px rgba(231,76,60,0.2)}}.pedido-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid rgba(212,175,55,0.2)}.pedido-mesa{font-family:'Playfair Display',serif;font-size:24px;color:#d4af37;font-weight:600;letter-spacing:2px}.pedido-hora{color:#666;font-size:13px;letter-spacing:1px;background:rgba(212,175,55,0.1);padding:5px 15px;border-radius:20px}.pedido-lista{margin-bottom:20px}.lista-item{color:#bbb;padding:10px 15px;margin-bottom:8px;background:rgba(212,175,55,0.05);border-left:3px solid #d4af37;border-radius:5px;font-size:15px;line-height:1.6;transition:all 0.3s}.lista-item:hover{background:rgba(212,175,55,0.1);padding-left:20px}.pedido-actions{display:flex;gap:12px;flex-wrap:wrap}.btn{padding:12px 25px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:1.5px;position:relative;overflow:hidden}.btn-entregado{background:linear-gradient(135deg,#2ecc71,#27ae60);color:white;box-shadow:0 4px 15px rgba(46,204,113,0.3)}.btn-entregado:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(46,204,113,0.4)}.btn-alerta{background:linear-gradient(135deg,#e74c3c,#c0392b);color:white;box-shadow:0 4px 15px rgba(231,76,60,0.3)}.btn-alerta:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(231,76,60,0.4)}.btn-eliminar{background:transparent;border:1px solid rgba(255,255,255,0.2);color:#666}.btn-eliminar:hover{background:rgba(231,76,60,0.1);border-color:#e74c3c;color:#e74c3c}.btn-vaciar{background:transparent;border:1px solid rgba(212,175,55,0.4);color:#d4af37;padding:15px 30px;margin-bottom:25px;font-size:13px;letter-spacing:2px}.btn-vaciar:hover{background:rgba(212,175,55,0.1);border-color:#d4af37;box-shadow:0 4px 15px rgba(212,175,55,0.2)}.alerta{animation:flash-luxury 0.4s alternate 4}@keyframes flash-luxury{from{background:rgba(10,10,10,0.95)}to{background:rgba(30,15,15,0.95)}}.right::-webkit-scrollbar{width:10px}.right::-webkit-scrollbar-track{background:rgba(10,10,10,0.5)}.right::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#d4af37,#b8941f);border-radius:5px;border:2px solid rgba(10,10,10,0.8)}.right::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#f4d03f,#d4af37)}@media(max-width:1024px){.container{flex-direction:column}.left{min-height:350px;border-right:none;border-bottom:1px solid rgba(212,175,55,0.2)}.branding h1{font-size:48px}.branding span{font-size:42px}.right{padding:35px}}@media(max-width:600px){.branding h1{font-size:36px;letter-spacing:4px}.header-sistema h2{font-size:32px}.form-group{padding:25px}.pedido-item{padding:20px}}.connection-status{position:fixed;top:10px;right:10px;padding:8px 15px;border-radius:20px;font-size:12px;font-weight:600;z-index:10000}.connected{background:rgba(46,204,113,0.9);color:white}.disconnected{background:rgba(231,76,60,0.9);color:white}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:white;font-family:'Poppins',sans-serif;min-height:100vh;background-image:radial-gradient(ellipse at top,rgba(212,175,55,0.15),transparent 50%),radial-gradient(ellipse at bottom,rgba(139,69,19,0.2),transparent 50%),url('https://i.postimg.cc/yYrQzzhg/pizza-with-mushrooms-olives-basil-leaves.jpg') center/cover fixed;position:relative}
+body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,10,0.85);backdrop-filter:blur(8px);z-index:-1}
+.container{display:flex;min-height:100vh;position:relative}
+.decor-top{position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,transparent,#d4af37,transparent);z-index:1000}
+.left{flex:1;background:linear-gradient(135deg,rgba(0,0,0,0.9),rgba(20,20,20,0.8)),url('https://images.unsplash.com/photo-1574126154517-d1e0d89e7344?q=80&w=1000') center/cover;display:flex;align-items:center;justify-content:center;position:relative;padding:40px 30px;border-right:1px solid rgba(212,175,55,0.2)}
+.branding{text-align:center;z-index:2}
+.branding-icon{font-size:60px;margin-bottom:15px;display:block;filter:drop-shadow(0 0 20px rgba(212,175,55,0.5))}
+.branding span{font-family:'Great Vibes',cursive;font-size:42px;color:#d4af37;display:block;margin-bottom:10px;text-shadow:0 0 30px rgba(212,175,55,0.5)}
+.branding h1{font-family:'Playfair Display',serif;font-size:48px;font-weight:400;letter-spacing:6px;color:white;margin-bottom:15px;text-transform:uppercase;line-height:1.2}
+.branding-tagline{font-size:12px;color:#888;letter-spacing:3px;text-transform:uppercase;border-top:1px solid rgba(212,175,55,0.3);border-bottom:1px solid rgba(212,175,55,0.3);padding:12px 0;display:inline-block;padding-left:25px;padding-right:25px}
+.right{flex:1.2;background:rgba(15,15,15,0.95);padding:40px;overflow-y:auto;max-height:100vh;box-shadow:-10px 0 50px rgba(0,0,0,0.5)}
+.header-sistema{text-align:center;margin-bottom:35px;padding-bottom:25px;border-bottom:2px solid rgba(212,175,55,0.3);position:relative}
+.header-sistema h2{font-family:'Playfair Display',serif;font-size:36px;color:#d4af37;margin-bottom:8px;font-weight:400;letter-spacing:2px;line-height:1.2}
+.header-sistema p{color:#666;font-size:13px;letter-spacing:2px;text-transform:uppercase}
+.contador-container{text-align:center;margin-bottom:35px}
+.contador{display:inline-flex;align-items:center;gap:15px;background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(212,175,55,0.05));border:1px solid rgba(212,175,55,0.4);padding:15px 30px;border-radius:50px;font-weight:500;letter-spacing:2px}
+.contador-numero{background:linear-gradient(135deg,#d4af37,#f4d03f);color:#0a0a0a;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.form-group{background:linear-gradient(135deg,rgba(30,30,30,0.8),rgba(20,20,20,0.9));padding:30px;border-radius:15px;margin-bottom:35px;border:1px solid rgba(212,175,55,0.2)}
+.form-row{margin-bottom:20px}
+.form-group label{display:block;color:#d4af37;margin-bottom:10px;font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:500}
+select,textarea{width:100%;padding:15px 20px;background:rgba(10,10,10,0.6);border:1px solid rgba(212,175,55,0.2);color:white;border-radius:10px;font-size:14px;font-family:'Poppins',sans-serif}
+select:focus,textarea:focus{border-color:#d4af37;outline:none}
+.btn-enviar{width:100%;padding:18px;background:linear-gradient(135deg,#d4af37,#f4d03f);border:none;border-radius:10px;font-size:15px;font-weight:600;color:#0a0a0a;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:2px}
+.btn-enviar:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(212,175,55,0.4)}
+.seccion-pedidos{margin-top:40px}
+.titulo-seccion{font-family:'Playfair Display',serif;font-size:24px;color:#d4af37;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-weight:400}
+.btn-vaciar{background:transparent;border:1px solid rgba(212,175,55,0.4);color:#d4af37;padding:12px 25px;margin-bottom:20px;font-size:12px;letter-spacing:2px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all 0.3s;width:100%;max-width:280px}
+.btn-vaciar:hover{background:rgba(212,175,55,0.1);border-color:#d4af37}
+.contador-badge{background:linear-gradient(135deg,#d4af37,#f4d03f);color:#0a0a0a;padding:3px 10px;border-radius:15px;font-size:11px;font-weight:700;margin-left:8px;min-width:22px;text-align:center;display:inline-block}
+.pedido-completado{background:linear-gradient(135deg,rgba(0,100,50,0.3),rgba(0,80,40,0.4));border:1px solid rgba(0,255,100,0.3);border-radius:10px;padding:18px 20px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;transition:all 0.3s ease}
+.pedido-completado:hover{background:linear-gradient(135deg,rgba(0,120,60,0.4),rgba(0,100,50,0.5));border-color:rgba(0,255,100,0.5);transform:translateX(3px)}
+.pedido-info{display:flex;align-items:center;gap:12px;flex:1}
+.pedido-icono{font-size:20px}
+.pedido-mesa-nombre{font-family:'Playfair Display',serif;font-size:18px;color:#00ff88;font-weight:600;letter-spacing:1px}
+.pedido-badge{background:rgba(0,255,100,0.2);color:#00ff88;padding:4px 10px;border-radius:15px;font-size:11px;font-weight:600;margin-left:8px;border:1px solid rgba(0,255,100,0.3)}
+.pedido-detalles{background:rgba(0,0,0,0.3);padding:8px 12px;border-radius:6px;margin-top:8px;font-size:12px;color:#aaa;display:none}
+.pedido-completado.expandido .pedido-detalles{display:block}
+.pedido-actions{display:flex;gap:8px;align-items:center}
+.btn-icono{width:36px;height:36px;border-radius:50%;border:2px solid rgba(0,255,100,0.5);background:transparent;color:#00ff88;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.3s}
+.btn-icono:hover{background:rgba(0,255,100,0.2);transform:scale(1.1)}
+.btn-eliminar-completado{background:rgba(255,0,0,0.2);border:1px solid rgba(255,0,0,0.4);color:#ff6666;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:11px;transition:all 0.3s}
+.btn-eliminar-completado:hover{background:rgba(255,0,0,0.3);border-color:rgba(255,0,0,0.6)}
+.pedido-pendiente{background:linear-gradient(135deg,rgba(30,30,30,0.9),rgba(20,20,20,0.95));padding:25px;border-radius:12px;margin-bottom:15px;border:1px solid rgba(212,175,55,0.2);box-shadow:0 5px 20px rgba(0,0,0,0.3);position:relative}
+.pedido-pendiente::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,#d4af37,#f4d03f)}
+.pedido-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(212,175,55,0.2)}
+.pedido-mesa{font-family:'Playfair Display',serif;font-size:20px;color:#d4af37;font-weight:600;letter-spacing:1px}
+.pedido-hora{color:#666;font-size:12px;letter-spacing:1px;background:rgba(212,175,55,0.1);padding:4px 12px;border-radius:15px}
+.pedido-lista{margin-bottom:15px}
+.lista-item{color:#bbb;padding:8px 12px;margin-bottom:6px;background:rgba(212,175,55,0.05);border-left:3px solid #d4af37;border-radius:4px;font-size:14px}
+.pedido-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{padding:10px 20px;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:1px}
+.btn-entregado{background:linear-gradient(135deg,#2ecc71,#27ae60);color:white}
+.btn-entregado:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(46,204,113,0.4)}
+.btn-alerta{background:linear-gradient(135deg,#e74c3c,#c0392b);color:white}
+.btn-alerta:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(231,76,60,0.4)}
+.alerta{animation:flash-luxury 0.4s alternate 4}
+@keyframes flash-luxury{from{background:rgba(10,10,10,0.95)}to{background:rgba(30,15,15,0.95)}}
+.connection-status{position:fixed;top:10px;right:10px;padding:6px 12px;border-radius:15px;font-size:11px;font-weight:600;z-index:10000}
+.connected{background:rgba(46,204,113,0.9);color:white}
+.disconnected{background:rgba(231,76,60,0.9);color:white}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .container{flex-direction:column}
+  .left{min-height:300px;border-right:none;border-bottom:1px solid rgba(212,175,55,0.2);padding:30px 20px}
+  .branding h1{font-size:40px;letter-spacing:4px}
+  .branding span{font-size:36px}
+  .branding-icon{font-size:50px}
+  .right{padding:30px 20px}
+  .header-sistema h2{font-size:30px}
+}
+
+@media(max-width:768px){
+  .left{min-height:250px;padding:25px 15px}
+  .branding h1{font-size:32px;letter-spacing:3px}
+  .branding span{font-size:30px}
+  .branding-icon{font-size:45px;margin-bottom:12px}
+  .branding-tagline{font-size:11px;letter-spacing:2px;padding:10px 20px}
+  .right{padding:25px 15px}
+  .header-sistema h2{font-size:26px}
+  .header-sistema p{font-size:12px}
+  .contador{padding:12px 25px;font-size:14px}
+  .contador-numero{width:36px;height:36px;font-size:14px}
+  .form-group{padding:25px 20px}
+  select,textarea{padding:12px 15px;font-size:13px}
+  .btn-enviar{padding:15px;font-size:14px}
+  .titulo-seccion{font-size:20px}
+  .pedido-mesa{font-size:18px}
+  .pedido-pendiente{padding:20px 15px}
+  .pedido-completado{padding:15px;flex-direction:column;align-items:flex-start;gap:12px}
+  .pedido-actions{width:100%;justify-content:flex-end}
+}
+
+@media(max-width:480px){
+  .left{min-height:220px;padding:20px 12px}
+  .branding h1{font-size:26px;letter-spacing:2px}
+  .branding span{font-size:26px}
+  .branding-icon{font-size:40px}
+  .branding-tagline{font-size:10px;letter-spacing:2px;padding:8px 15px}
+  .right{padding:20px 12px}
+  .header-sistema h2{font-size:22px}
+  .header-sistema p{font-size:11px;letter-spacing:1px}
+  .contador{padding:10px 20px;font-size:13px;gap:10px}
+  .contador-numero{width:32px;height:32px;font-size:13px}
+  .form-group{padding:20px 15px;margin-bottom:25px}
+  .form-row{margin-bottom:15px}
+  .form-group label{font-size:10px;letter-spacing:1px}
+  select,textarea{padding:10px 12px;font-size:13px}
+  .btn-enviar{padding:13px;font-size:13px;letter-spacing:1px}
+  .titulo-seccion{font-size:18px;margin-bottom:15px}
+  .btn-vaciar{padding:10px 20px;font-size:11px;max-width:100%}
+  .pedido-pendiente{padding:15px 12px;margin-bottom:12px}
+  .pedido-header{flex-direction:column;align-items:flex-start;gap:8px;margin-bottom:10px;padding-bottom:10px}
+  .pedido-mesa{font-size:16px}
+  .pedido-hora{font-size:11px;padding:3px 10px}
+  .lista-item{padding:6px 10px;font-size:13px;margin-bottom:5px}
+  .pedido-actions{gap:8px;flex-direction:column;width:100%}
+  .pedido-actions .btn{width:100%}
+  .btn{padding:8px 15px;font-size:11px}
+  .pedido-completado{padding:12px}
+  .pedido-mesa-nombre{font-size:16px}
+  .pedido-badge{font-size:10px;padding:3px 8px}
+  .pedido-icono{font-size:18px}
+  .btn-icono{width:32px;height:32px;font-size:14px}
+  .btn-eliminar-completado{padding:5px 10px;font-size:10px}
+}
 </style>
 </head>
 <body>
 <div class="decor-top"></div>
 <div id="connectionStatus" class="connection-status disconnected">Conectando...</div>
 <div class="container">
-<div class="left">
-<div class="branding">
-<span class="branding-icon">🍕</span>
-<span>Authentic Italian</span>
-<h1>Don Nuvolini</h1>
-<div class="branding-tagline">Pastas & Pizzas</div>
-</div>
-</div>
-<div class="right">
-<div class="header-sistema">
-<h2>Sistema de Pedidos</h2>
-<p>Gestión Premium de Mesas</p>
-</div>
-<div class="contador-container">
-<div class="contador">
-<span>Pedidos Pendientes</span>
-<div class="contador-numero" id="contador">0</div>
-</div>
-</div>
-<div class="form-group">
-<div class="form-row">
-<label>Mesa</label>
-<select id="mesa">
-<option value="Mesa 1">Mesa 1 - VIP</option>
-<option value="Mesa 2">Mesa 2 - VIP</option>
-<option value="Mesa 3">Mesa 3 - Premium</option>
-<option value="Mesa 4">Mesa 4 - Premium</option>
-<option value="Mesa 5">Mesa 5 - Standard</option>
-<option value="Mesa 6">Mesa 6 - Standard</option>
-<option value="Mesa 7">Mesa 7 - Standard</option>
-</select>
-</div>
-<div class="form-row">
-<label>Detalle del Pedido</label>
-<textarea id="pedido" rows="4" placeholder="Ej: Pizza Margarita&#10;Coca-Cola&#10;Galletas"></textarea>
-</div>
-<button class="btn-enviar" onclick="enviarPedido()">✦ Enviar Pedido</button>
-</div>
-<div class="seccion-pedidos">
-<h3 class="titulo-seccion">Pedidos en Cocina</h3>
-<div id="listaPedidos"></div>
-</div>
-<div class="seccion-pedidos">
-<h3 class="titulo-seccion">Pedidos Completados</h3>
-<button class="btn btn-vaciar" onclick="vaciarEntregados()">Limpiar Historial</button>
-<div id="listaEntregados"></div>
-</div>
-</div>
+    <div class="left">
+        <div class="branding">
+            <span class="branding-icon">🍕</span>
+            <span>Authentic Italian</span>
+            <h1>Don Nuvolini</h1>
+            <div class="branding-tagline">Pastas & Pizzas</div>
+        </div>
+    </div>
+    <div class="right">
+        <div class="header-sistema">
+            <h2>Sistema de Pedidos</h2>
+            <p>Gestión Premium de Mesas</p>
+        </div>
+        <div class="contador-container">
+            <div class="contador">
+                <span>Pedidos Pendientes</span>
+                <div class="contador-numero" id="contadorPendientes">0</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <label>Mesa</label>
+                <select id="mesa">
+                    <option value="Mesa 1">Mesa 1 - VIP</option>
+                    <option value="Mesa 2">Mesa 2 - VIP</option>
+                    <option value="Mesa 3">Mesa 3 - Premium</option>
+                    <option value="Mesa 4">Mesa 4 - Premium</option>
+                    <option value="Mesa 5">Mesa 5 - Standard</option>
+                    <option value="Mesa 6">Mesa 6 - Standard</option>
+                    <option value="Mesa 7">Mesa 7 - Standard</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>Detalle del Pedido</label>
+                <textarea id="pedido" rows="4" placeholder="Ej: Pizza Margarita&#10;Coca-Cola&#10;Galletas"></textarea>
+            </div>
+            <button class="btn-enviar" onclick="enviarPedido()">✦ Enviar Pedido</button>
+        </div>
+        
+        <div class="seccion-pedidos">
+            <h3 class="titulo-seccion">📋 Pedidos en Cocina</h3>
+            <div id="listaPendientes"></div>
+        </div>
+        
+        <div class="seccion-pedidos">
+            <h3 class="titulo-seccion">✅ Pedidos Completados</h3>
+            <button class="btn-vaciar" onclick="vaciarEntregados()">
+                🗑 Limpiar Historial <span class="contador-badge" id="contadorEntregados">0</span>
+            </button>
+            <div id="listaEntregados"></div>
+        </div>
+    </div>
 </div>
 
 <script>
-// ✅ FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDeyW0gz8xiCtuoBY6XWm1KKJ1CuXtNNf0",
   authDomain: "pizza-4f11f.firebaseapp.com",
@@ -81,18 +210,17 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Referencias
 const pendientesRef = db.ref('pedidosPendientes');
 const entregadosRef = db.ref('pedidosEntregados');
-const alertasRef = db.ref('alertas'); // 🔔 Ruta para alertas
+const alertasRef = db.ref('alertas');
 
 let sonido = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
 let ultimoPedidoId = null;
 let ultimaAlertaTime = 0;
 
-// 🔔 Reproduce sonido LOCAL
+// 🔔 Reproducir sonido de alerta
 function reproducirAlerta(){
-  console.log("🔊 Reproduciendo alerta local");
+  console.log("🔊 Reproduciendo alerta");
   sonido.currentTime = 0;
   sonido.play()
     .then(() => console.log("✅ Audio playing"))
@@ -103,7 +231,7 @@ function reproducirAlerta(){
   setTimeout(()=>document.body.classList.remove("alerta"),1500);
 }
 
-// 🔔 Dispara alerta GLOBAL
+// 🔔 Disparar alerta global
 function dispararAlertaGlobal(){
   const id = 'alerta_' + Date.now();
   console.log("📡 Disparando alerta global:", id);
@@ -113,13 +241,8 @@ function dispararAlertaGlobal(){
     origen: 'manual'
   }).then(() => {
     console.log("✅ Alerta escrita en Firebase");
-    // Auto-limpieza
     setTimeout(() => alertasRef.child(id).remove(), 2000);
   }).catch(e => console.error("❌ Error al escribir alerta:", e));
-}
-
-function parsearPedido(t){
-  return t.split(/[\n,]+/).map(x=>x.trim()).filter(x=>x.length>0);
 }
 
 function enviarPedido(){
@@ -127,90 +250,158 @@ function enviarPedido(){
   const texto = document.getElementById("pedido").value;
   if(texto.trim()===""){ alert("Escribe el pedido"); return; }
   
-  const items = parsearPedido(texto);
+  const items = texto.split(/[\n,]+/).map(x=>x.trim()).filter(x=>x.length>0);
+  
   pendientesRef.push({
-    mesa, items, 
+    mesa: mesa,
+    items: items, 
     hora: new Date().toLocaleTimeString(), 
-    timestamp: Date.now(), 
+    timestamp: Date.now(),
     estado: "pendiente"
   }).then(() => {
-    console.log("✅ Pedido enviado a Firebase");
     document.getElementById("pedido").value = "";
+    alert("✅ Pedido enviado a cocina");
   }).catch(e => {
-    console.error("❌ Error:", e);
-    alert("Error de conexión");
+    console.error("Error:", e);
+    alert("❌ Error de conexión");
   });
 }
 
 function marcarEntregado(id){
-  pendientesRef.child(id).once('value').then(s => {
-    const p = s.val();
-    if(p){
-      entregadosRef.push(p).then(() => pendientesRef.child(id).remove());
+  console.log("🔄 Marcando pedido como entregado:", id);
+  pendientesRef.child(id).once('value').then(snapshot => {
+    const pedido = snapshot.val();
+    if(pedido){
+      console.log("📦 Pedido a completar:", pedido);
+      entregadosRef.push({
+        mesa: pedido.mesa,
+        items: pedido.items,
+        hora: pedido.hora,
+        timestamp: pedido.timestamp,
+        estado: "completado",
+        fechaCompletado: new Date().toLocaleString()
+      }).then(() => {
+        console.log("✅ Pedido guardado en completados");
+        pendientesRef.child(id).remove();
+      }).catch(err => {
+        console.error("❌ Error al guardar:", err);
+      });
     }
   });
 }
 
-function eliminarEntregado(id){ entregadosRef.child(id).remove(); }
-function vaciarEntregados(){ if(confirm("¿Limpiar historial?")) entregadosRef.remove(); }
+function eliminarEntregado(id){
+  if(confirm("¿Eliminar este pedido del historial?")){
+    entregadosRef.child(id).remove();
+  }
+}
+
+function vaciarEntregados(){ 
+  if(confirm("¿Estás seguro de limpiar TODO el historial?")){
+    entregadosRef.remove().then(() => {
+      console.log("🗑 Historial limpiado");
+    });
+  }
+}
 
 function renderPendientes(lista){
-  const cont = document.getElementById("listaPedidos");
+  const cont = document.getElementById("listaPendientes");
   cont.innerHTML = "";
-  const ahora = Date.now();
-  let c = 0;
+  let count = 0;
   
-  lista.forEach(s => {
-    const p = s.val(), id = s.key; c++;
-    const div = document.createElement("div");
-    div.className = "pedido-item";
-    if((ahora - p.timestamp)/60000 > 5) div.classList.add("rojo");
+  if(lista.length === 0){
+    cont.innerHTML = "<p style='color:#666;text-align:center;padding:20px'>No hay pedidos pendientes</p>";
+    document.getElementById("contadorPendientes").innerText = "0";
+    return;
+  }
+  
+  lista.forEach(snapshot => {
+    const p = snapshot.val();
+    const id = snapshot.key;
+    count++;
     
+    const div = document.createElement("div");
+    div.className = "pedido-pendiente";
     div.innerHTML = `
       <div class="pedido-header">
         <span class="pedido-mesa">${p.mesa}</span>
         <span class="pedido-hora">${p.hora}</span>
       </div>
-      <div class="pedido-lista">${p.items.map(i=>`<div class="lista-item">${i}</div>`).join('')}</div>
+      <div class="pedido-lista">
+        ${p.items.map(i=>`<div class="lista-item">• ${i}</div>`).join('')}
+      </div>
       <div class="pedido-actions">
-        <button class="btn btn-entregado" onclick="marcarEntregado('${id}')">✓ Completado</button>
+        <button class="btn btn-entregado" onclick="marcarEntregado('${id}')">✓ Marcar Completado</button>
         <button class="btn btn-alerta" onclick="dispararAlertaGlobal()">🔔 Alertar</button>
-      </div>`;
+      </div>
+    `;
     cont.appendChild(div);
   });
-  document.getElementById("contador").innerText = c;
+  
+  document.getElementById("contadorPendientes").innerText = count;
 }
 
 function renderEntregados(lista){
+  console.log("📊 Renderizando completados. Total:", lista.length);
   const cont = document.getElementById("listaEntregados");
   cont.innerHTML = "";
-  lista.forEach(s => {
-    const p = s.val(), id = s.key;
+  
+  const badgeElement = document.getElementById("contadorEntregados");
+  if(badgeElement){
+    badgeElement.innerText = lista.length;
+    console.log("✅ Contador actualizado a:", lista.length);
+  }
+  
+  if(lista.length === 0){
+    cont.innerHTML = "<p style='color:#666;text-align:center;padding:20px'>No hay pedidos completados</p>";
+    return;
+  }
+  
+  lista.forEach((snapshot, index) => {
+    const p = snapshot.val();
+    const id = snapshot.key;
+    console.log(`[${index}] Pedido: ${p.mesa} - ${p.items.length} items`);
+    
     const div = document.createElement("div");
-    div.className = "pedido-item entregado";
+    div.className = "pedido-completado";
     div.innerHTML = `
-      <div class="pedido-header">
-        <span class="pedido-mesa">${p.mesa}</span>
-        <span class="pedido-hora">${p.hora}</span>
+      <div class="pedido-info">
+        <span class="pedido-icono">🍽️</span>
+        <div>
+          <span class="pedido-mesa-nombre">${p.mesa}</span>
+          <span class="pedido-badge">${p.items.length} pedido${p.items.length>1?'s':''}</span>
+        </div>
       </div>
-      <div class="pedido-lista">${p.items.map(i=>`<div class="lista-item">${i}</div>`).join('')}</div>
+      <div class="pedido-detalles">
+        <strong>Detalle:</strong><br>
+        ${p.items.map(i=>`• ${i}`).join('<br>')}<br><br>
+        <small>Hora: ${p.hora} | Completado: ${p.fechaCompletado || 'N/A'}</small>
+      </div>
       <div class="pedido-actions">
-        <button class="btn btn-eliminar" onclick="eliminarEntregado('${id}')">Eliminar</button>
-      </div>`;
+        <button class="btn-icono" onclick="this.closest('.pedido-completado').classList.toggle('expandido')" title="Ver detalles">▶</button>
+        <button class="btn-eliminar-completado" onclick="eliminarEntregado('${id}')">Eliminar</button>
+      </div>
+    `;
     cont.appendChild(div);
   });
 }
 
-// 🔁 LISTENERS PRINCIPALES
-pendientesRef.on('value', s => {
-  const arr = []; s.forEach(x => arr.push(x));
-  renderPendientes(arr);
-  actualizarEstadoConexion(true);
+// LISTENERS
+pendientesRef.on('value', snapshot => {
+  const lista = [];
+  snapshot.forEach(child => lista.push(child));
+  console.log("📋 Pedidos pendientes:", lista.length);
+  renderPendientes(lista);
 });
 
-entregadosRef.on('value', s => {
-  const arr = []; s.forEach(x => arr.push(x));
-  renderEntregados(arr);
+entregadosRef.on('value', snapshot => {
+  const lista = [];
+  snapshot.forEach(child => {
+    console.log("📦 Leyendo pedido completado:", child.key, child.val());
+    lista.push(child);
+  });
+  console.log("✅ Total pedidos completados en Firebase:", lista.length);
+  renderEntregados(lista);
 });
 
 // 🔔 Alerta automática por nuevo pedido
@@ -227,7 +418,6 @@ alertasRef.on('child_added', s => {
   const data = s.val();
   const ahora = Date.now();
   
-  // Evitar duplicados en los últimos 3 segundos
   if(ahora - ultimaAlertaTime < 3000) {
     console.log("⏭ Alerta ignorada (muy reciente)");
     return;
@@ -235,22 +425,21 @@ alertasRef.on('child_added', s => {
   
   console.log("🌍 Alerta global recibida:", data);
   ultimaAlertaTime = ahora;
-  reproducirAlerta(); // ✅ Suena en ESTE dispositivo
+  reproducirAlerta();
 });
 
-function actualizarEstadoConexion(ok){
-  const el = document.getElementById("connectionStatus");
-  el.className = "connection-status " + (ok ? "connected" : "disconnected");
-  el.innerText = ok ? "● Conectado" : "● Desconectado";
-}
-
-// Estado de conexión Firebase
 db.ref('.info/connected').on('value', s => {
-  console.log("🔗 Firebase conectado:", s.val());
-  actualizarEstadoConexion(s.val() === true);
+  const el = document.getElementById("connectionStatus");
+  if(s.val() === true){
+    el.className = "connection-status connected";
+    el.innerText = "● Conectado";
+  }else{
+    el.className = "connection-status disconnected";
+    el.innerText = "● Desconectado";
+  }
 });
 
-// 🎵 Habilitar audio con primera interacción
+// Habilitar audio con primera interacción
 document.addEventListener('click', () => {
   console.log("🎵 Habilitando audio...");
   sonido.play().then(() => {
@@ -260,7 +449,7 @@ document.addEventListener('click', () => {
   }).catch(e => console.log("⚠ Audio pendiente de interacción:", e.message));
 }, {once: true});
 
-console.log("🚀 Sistema cargado - Firebase:", firebaseConfig.projectId);
+console.log("🚀 Sistema cargado. Abre la consola (F12) para ver logs");
 </script>
 </body>
 </html>

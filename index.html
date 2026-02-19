@@ -611,6 +611,22 @@ textarea{
   transform:translateY(-2px);
 }
 
+/* Botón de alerta en pedidos completados - estilo integrado */
+.pedido-completado .btn-alerta {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  min-width: 110px;
+  padding: 10px 15px;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.pedido-completado .btn-alerta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(231, 76, 60, 0.5);
+  animation: pulse 0.5s ease;
+}
+
 /* MODAL ELEGANTE */
 .modal-overlay{
   position:fixed;
@@ -801,6 +817,16 @@ textarea{
   .pedido-actions{width:100%;justify-content:flex-end;}
   .modal-content{padding:40px 35px;}
   .modal-title{font-size:26px;}
+  
+  /* Ajuste responsive para botón de alerta en completados */
+  .pedido-completado .pedido-actions {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .pedido-completado .btn-alerta {
+    min-width: 100%;
+    order: 2;
+  }
 }
 
 @media(max-width:480px){
@@ -1002,7 +1028,7 @@ function enviarPedido(){
     estado: "pendiente"
   }).then(() => {
     document.getElementById("pedido").value = "";
-    mostrarModal(); // Usar modal elegante en lugar de alert
+    mostrarModal();
   }).catch(e => {
     console.error("Error:", e);
     alert("❌ Error de conexión");
@@ -1121,6 +1147,7 @@ function renderEntregados(lista){
       </div>
       <div class="pedido-actions">
         <button class="btn-icono" onclick="this.closest('.pedido-completado').classList.toggle('expandido')" title="Ver detalles">▶</button>
+        <button class="btn btn-alerta" style="min-width:110px;padding:10px 15px;font-size:11px;letter-spacing:1px;" onclick="dispararAlertaGlobal()">🔔 Alertar</button>
         <button class="btn-eliminar-completado" onclick="eliminarEntregado('${id}')">Eliminar</button>
       </div>
     `;

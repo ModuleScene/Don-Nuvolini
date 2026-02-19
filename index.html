@@ -9,137 +9,860 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0a;color:white;font-family:'Poppins',sans-serif;min-height:100vh;background-image:radial-gradient(ellipse at top,rgba(212,175,55,0.15),transparent 50%),radial-gradient(ellipse at bottom,rgba(139,69,19,0.2),transparent 50%),url('https://i.postimg.cc/yYrQzzhg/pizza-with-mushrooms-olives-basil-leaves.jpg') center/cover fixed;position:relative}
-body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,10,0.85);backdrop-filter:blur(8px);z-index:-1}
-.container{display:flex;min-height:100vh;position:relative}
-.decor-top{position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,transparent,#d4af37,transparent);z-index:1000}
-.left{flex:1;background:linear-gradient(135deg,rgba(0,0,0,0.9),rgba(20,20,20,0.8)),url('https://images.unsplash.com/photo-1574126154517-d1e0d89e7344?q=80&w=1000') center/cover;display:flex;align-items:center;justify-content:center;position:relative;padding:40px 30px;border-right:1px solid rgba(212,175,55,0.2)}
-.branding{text-align:center;z-index:2}
-.branding-icon{font-size:60px;margin-bottom:15px;display:block;filter:drop-shadow(0 0 20px rgba(212,175,55,0.5))}
-.branding span{font-family:'Great Vibes',cursive;font-size:42px;color:#d4af37;display:block;margin-bottom:10px;text-shadow:0 0 30px rgba(212,175,55,0.5)}
-.branding h1{font-family:'Playfair Display',serif;font-size:48px;font-weight:400;letter-spacing:6px;color:white;margin-bottom:15px;text-transform:uppercase;line-height:1.2}
-.branding-tagline{font-size:12px;color:#888;letter-spacing:3px;text-transform:uppercase;border-top:1px solid rgba(212,175,55,0.3);border-bottom:1px solid rgba(212,175,55,0.3);padding:12px 0;display:inline-block;padding-left:25px;padding-right:25px}
-.right{flex:1.2;background:rgba(15,15,15,0.95);padding:40px;overflow-y:auto;max-height:100vh;box-shadow:-10px 0 50px rgba(0,0,0,0.5)}
-.header-sistema{text-align:center;margin-bottom:35px;padding-bottom:25px;border-bottom:2px solid rgba(212,175,55,0.3);position:relative}
-.header-sistema h2{font-family:'Playfair Display',serif;font-size:36px;color:#d4af37;margin-bottom:8px;font-weight:400;letter-spacing:2px;line-height:1.2}
-.header-sistema p{color:#666;font-size:13px;letter-spacing:2px;text-transform:uppercase}
-.contador-container{text-align:center;margin-bottom:35px}
-.contador{display:inline-flex;align-items:center;gap:15px;background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(212,175,55,0.05));border:1px solid rgba(212,175,55,0.4);padding:15px 30px;border-radius:50px;font-weight:500;letter-spacing:2px}
-.contador-numero{background:linear-gradient(135deg,#d4af37,#f4d03f);color:#0a0a0a;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
-.form-group{background:linear-gradient(135deg,rgba(30,30,30,0.8),rgba(20,20,20,0.9));padding:30px;border-radius:15px;margin-bottom:35px;border:1px solid rgba(212,175,55,0.2)}
-.form-row{margin-bottom:20px}
-.form-group label{display:block;color:#d4af37;margin-bottom:10px;font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:500}
-select,textarea{width:100%;padding:15px 20px;background:rgba(10,10,10,0.6);border:1px solid rgba(212,175,55,0.2);color:white;border-radius:10px;font-size:14px;font-family:'Poppins',sans-serif}
-select:focus,textarea:focus{border-color:#d4af37;outline:none}
-.btn-enviar{width:100%;padding:18px;background:linear-gradient(135deg,#d4af37,#f4d03f);border:none;border-radius:10px;font-size:15px;font-weight:600;color:#0a0a0a;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:2px}
-.btn-enviar:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(212,175,55,0.4)}
-.seccion-pedidos{margin-top:40px}
-.titulo-seccion{font-family:'Playfair Display',serif;font-size:24px;color:#d4af37;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-weight:400}
-.btn-vaciar{background:transparent;border:1px solid rgba(212,175,55,0.4);color:#d4af37;padding:12px 25px;margin-bottom:20px;font-size:12px;letter-spacing:2px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all 0.3s;width:100%;max-width:280px}
-.btn-vaciar:hover{background:rgba(212,175,55,0.1);border-color:#d4af37}
-.contador-badge{background:linear-gradient(135deg,#d4af37,#f4d03f);color:#0a0a0a;padding:3px 10px;border-radius:15px;font-size:11px;font-weight:700;margin-left:8px;min-width:22px;text-align:center;display:inline-block}
-.pedido-completado{background:linear-gradient(135deg,rgba(0,100,50,0.3),rgba(0,80,40,0.4));border:1px solid rgba(0,255,100,0.3);border-radius:10px;padding:18px 20px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;transition:all 0.3s ease}
-.pedido-completado:hover{background:linear-gradient(135deg,rgba(0,120,60,0.4),rgba(0,100,50,0.5));border-color:rgba(0,255,100,0.5);transform:translateX(3px)}
-.pedido-info{display:flex;align-items:center;gap:12px;flex:1}
-.pedido-icono{font-size:20px}
-.pedido-mesa-nombre{font-family:'Playfair Display',serif;font-size:18px;color:#00ff88;font-weight:600;letter-spacing:1px}
-.pedido-badge{background:rgba(0,255,100,0.2);color:#00ff88;padding:4px 10px;border-radius:15px;font-size:11px;font-weight:600;margin-left:8px;border:1px solid rgba(0,255,100,0.3)}
-.pedido-detalles{background:rgba(0,0,0,0.3);padding:8px 12px;border-radius:6px;margin-top:8px;font-size:12px;color:#aaa;display:none}
-.pedido-completado.expandido .pedido-detalles{display:block}
-.pedido-actions{display:flex;gap:8px;align-items:center}
-.btn-icono{width:36px;height:36px;border-radius:50%;border:2px solid rgba(0,255,100,0.5);background:transparent;color:#00ff88;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.3s}
-.btn-icono:hover{background:rgba(0,255,100,0.2);transform:scale(1.1)}
-.btn-eliminar-completado{background:rgba(255,0,0,0.2);border:1px solid rgba(255,0,0,0.4);color:#ff6666;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:11px;transition:all 0.3s}
-.btn-eliminar-completado:hover{background:rgba(255,0,0,0.3);border-color:rgba(255,0,0,0.6)}
-.pedido-pendiente{background:linear-gradient(135deg,rgba(30,30,30,0.9),rgba(20,20,20,0.95));padding:25px;border-radius:12px;margin-bottom:15px;border:1px solid rgba(212,175,55,0.2);box-shadow:0 5px 20px rgba(0,0,0,0.3);position:relative}
-.pedido-pendiente::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,#d4af37,#f4d03f)}
-.pedido-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(212,175,55,0.2)}
-.pedido-mesa{font-family:'Playfair Display',serif;font-size:20px;color:#d4af37;font-weight:600;letter-spacing:1px}
-.pedido-hora{color:#666;font-size:12px;letter-spacing:1px;background:rgba(212,175,55,0.1);padding:4px 12px;border-radius:15px}
-.pedido-lista{margin-bottom:15px}
-.lista-item{color:#bbb;padding:8px 12px;margin-bottom:6px;background:rgba(212,175,55,0.05);border-left:3px solid #d4af37;border-radius:4px;font-size:14px}
-.pedido-actions{display:flex;gap:10px;flex-wrap:wrap}
-.btn{padding:10px 20px;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:1px}
-.btn-entregado{background:linear-gradient(135deg,#2ecc71,#27ae60);color:white}
-.btn-entregado:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(46,204,113,0.4)}
-.btn-alerta{background:linear-gradient(135deg,#e74c3c,#c0392b);color:white}
-.btn-alerta:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(231,76,60,0.4)}
-.alerta{animation:flash-luxury 0.4s alternate 4}
-@keyframes flash-luxury{from{background:rgba(10,10,10,0.95)}to{background:rgba(30,15,15,0.95)}}
-.connection-status{position:fixed;top:10px;right:10px;padding:6px 12px;border-radius:15px;font-size:11px;font-weight:600;z-index:10000}
-.connected{background:rgba(46,204,113,0.9);color:white}
-.disconnected{background:rgba(231,76,60,0.9);color:white}
+body{
+  background:#0a0a0a;
+  color:white;
+  font-family:'Poppins',sans-serif;
+  min-height:100vh;
+  background-image:
+    radial-gradient(ellipse at top,rgba(212,175,55,0.15),transparent 50%),
+    radial-gradient(ellipse at bottom,rgba(139,69,19,0.2),transparent 50%),
+    url('https://i.postimg.cc/yYrQzzhg/pizza-with-mushrooms-olives-basil-leaves.jpg') center/cover fixed;
+  position:relative;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(10,10,10,0.85);
+  backdrop-filter:blur(10px);
+  z-index:-1;
+}
 
-/* RESPONSIVE */
+/* DECORACIONES */
+.decor-top{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:4px;
+  background:linear-gradient(90deg,transparent,#d4af37,transparent);
+  z-index:1000;
+}
+
+/* LAYOUT PRINCIPAL */
+.container{
+  display:flex;
+  min-height:100vh;
+  position:relative;
+  gap:0;
+}
+
+/* PANEL IZQUIERDO - BRANDING */
+.left{
+  flex:1;
+  background:linear-gradient(135deg,rgba(0,0,0,0.95),rgba(20,20,20,0.9)),
+             url('https://images.unsplash.com/photo-1574126154517-d1e0d89e7344?q=80&w=1000') center/cover;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  padding:60px 40px;
+  border-right:2px solid rgba(212,175,55,0.3);
+  box-shadow:10px 0 50px rgba(0,0,0,0.5);
+}
+
+.branding{
+  text-align:center;
+  z-index:2;
+  animation:fadeInUp 1s ease;
+}
+
+.branding-icon{
+  font-size:80px;
+  margin-bottom:20px;
+  display:block;
+  filter:drop-shadow(0 0 30px rgba(212,175,55,0.6));
+  animation:glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow{
+  from{filter:drop-shadow(0 0 20px rgba(212,175,55,0.4));}
+  to{filter:drop-shadow(0 0 40px rgba(212,175,55,0.8));}
+}
+
+.branding span{
+  font-family:'Great Vibes',cursive;
+  font-size:48px;
+  color:#d4af37;
+  display:block;
+  margin-bottom:15px;
+  text-shadow:0 0 30px rgba(212,175,55,0.5);
+  letter-spacing:2px;
+}
+
+.branding h1{
+  font-family:'Playfair Display',serif;
+  font-size:56px;
+  font-weight:400;
+  letter-spacing:8px;
+  color:white;
+  margin-bottom:20px;
+  text-transform:uppercase;
+  line-height:1.2;
+  text-shadow:0 4px 15px rgba(0,0,0,0.5);
+}
+
+.branding-tagline{
+  font-size:13px;
+  color:#aaa;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  border-top:1px solid rgba(212,175,55,0.4);
+  border-bottom:1px solid rgba(212,175,55,0.4);
+  padding:15px 30px;
+  display:inline-block;
+  margin-top:10px;
+}
+
+/* PANEL DERECHO - SISTEMA */
+.right{
+  flex:1.3;
+  background:rgba(15,15,15,0.95);
+  padding:50px 40px;
+  overflow-y:auto;
+  max-height:100vh;
+  box-shadow:-10px 0 50px rgba(0,0,0,0.5);
+}
+
+/* HEADER DEL SISTEMA */
+.header-sistema{
+  text-align:center;
+  margin-bottom:50px;
+  padding-bottom:30px;
+  border-bottom:2px solid rgba(212,175,55,0.3);
+  position:relative;
+  animation:fadeInDown 0.8s ease;
+}
+
+.header-sistema h2{
+  font-family:'Playfair Display',serif;
+  font-size:42px;
+  color:#d4af37;
+  margin-bottom:10px;
+  font-weight:400;
+  letter-spacing:3px;
+  line-height:1.2;
+  text-shadow:0 2px 10px rgba(212,175,55,0.3);
+}
+
+.header-sistema p{
+  color:#888;
+  font-size:14px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+
+/* CONTADOR DE PEDIDOS */
+.contador-container{
+  text-align:center;
+  margin-bottom:40px;
+  animation:fadeIn 1s ease 0.2s both;
+}
+
+.contador{
+  display:inline-flex;
+  align-items:center;
+  gap:20px;
+  background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05));
+  border:2px solid rgba(212,175,55,0.4);
+  padding:20px 40px;
+  border-radius:60px;
+  font-weight:500;
+  letter-spacing:2px;
+  box-shadow:0 5px 20px rgba(212,175,55,0.2);
+}
+
+.contador-numero{
+  background:linear-gradient(135deg,#d4af37,#f4d03f);
+  color:#0a0a0a;
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:20px;
+  box-shadow:0 4px 15px rgba(212,175,55,0.4);
+}
+
+/* FORMULARIO DE PEDIDOS */
+.form-group{
+  background:linear-gradient(135deg,rgba(30,30,30,0.9),rgba(20,20,20,0.95));
+  padding:40px;
+  border-radius:20px;
+  margin-bottom:40px;
+  border:1px solid rgba(212,175,55,0.2);
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+  animation:fadeInUp 0.8s ease 0.3s both;
+}
+
+.form-row{
+  margin-bottom:25px;
+}
+
+.form-group label{
+  display:block;
+  color:#d4af37;
+  margin-bottom:12px;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-weight:600;
+}
+
+select,textarea{
+  width:100%;
+  padding:18px 25px;
+  background:rgba(10,10,10,0.7);
+  border:2px solid rgba(212,175,55,0.2);
+  color:white;
+  border-radius:12px;
+  font-size:15px;
+  font-family:'Poppins',sans-serif;
+  transition:all 0.3s ease;
+}
+
+select:focus,textarea:focus{
+  border-color:#d4af37;
+  outline:none;
+  box-shadow:0 0 20px rgba(212,175,55,0.2);
+  background:rgba(10,10,10,0.9);
+}
+
+textarea{
+  resize:vertical;
+  min-height:120px;
+  line-height:1.6;
+}
+
+.btn-enviar{
+  width:100%;
+  padding:22px;
+  background:linear-gradient(135deg,#d4af37,#f4d03f);
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:600;
+  color:#0a0a0a;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  text-transform:uppercase;
+  letter-spacing:3px;
+  box-shadow:0 5px 20px rgba(212,175,55,0.3);
+  position:relative;
+  overflow:hidden;
+}
+
+.btn-enviar::before{
+  content:'';
+  position:absolute;
+  top:50%;left:50%;
+  width:0;height:0;
+  border-radius:50%;
+  background:rgba(255,255,255,0.3);
+  transform:translate(-50%,-50%);
+  transition:width 0.6s,height 0.6s;
+}
+
+.btn-enviar:hover::before{
+  width:300px;height:300px;
+}
+
+.btn-enviar:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 30px rgba(212,175,55,0.5);
+}
+
+.btn-enviar:active{
+  transform:translateY(-1px);
+}
+
+/* SECCIONES DE PEDIDOS */
+.seccion-pedidos{
+  margin-top:50px;
+  animation:fadeIn 1s ease 0.5s both;
+}
+
+.titulo-seccion{
+  font-family:'Playfair Display',serif;
+  font-size:28px;
+  color:#d4af37;
+  margin-bottom:30px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  font-weight:400;
+  padding-bottom:15px;
+  border-bottom:1px solid rgba(212,175,55,0.2);
+}
+
+/* BOTON VACIAR */
+.btn-vaciar{
+  background:transparent;
+  border:2px solid rgba(212,175,55,0.4);
+  color:#d4af37;
+  padding:15px 30px;
+  margin-bottom:25px;
+  font-size:12px;
+  letter-spacing:2px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  cursor:pointer;
+  transition:all 0.3s;
+  width:100%;
+  max-width:320px;
+  border-radius:10px;
+  font-weight:600;
+}
+
+.btn-vaciar:hover{
+  background:rgba(212,175,55,0.1);
+  border-color:#d4af37;
+  transform:translateY(-2px);
+  box-shadow:0 5px 20px rgba(212,175,55,0.2);
+}
+
+.contador-badge{
+  background:linear-gradient(135deg,#d4af37,#f4d03f);
+  color:#0a0a0a;
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+  margin-left:10px;
+  min-width:28px;
+  text-align:center;
+  display:inline-block;
+}
+
+/* TARJETAS DE PEDIDOS PENDIENTES */
+.pedido-pendiente{
+  background:linear-gradient(135deg,rgba(30,30,30,0.95),rgba(20,20,20,0.98));
+  padding:35px;
+  border-radius:16px;
+  margin-bottom:20px;
+  border:2px solid rgba(212,175,55,0.2);
+  box-shadow:0 8px 30px rgba(0,0,0,0.4);
+  position:relative;
+  overflow:hidden;
+  transition:all 0.3s ease;
+  animation:slideIn 0.5s ease;
+}
+
+@keyframes slideIn{
+  from{
+    opacity:0;
+    transform:translateX(-30px);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+.pedido-pendiente::before{
+  content:"";
+  position:absolute;
+  top:0;left:0;
+  width:6px;height:100%;
+  background:linear-gradient(180deg,#d4af37,#f4d03f);
+  box-shadow:0 0 20px rgba(212,175,55,0.5);
+}
+
+.pedido-pendiente:hover{
+  border-color:rgba(212,175,55,0.4);
+  transform:translateX(5px);
+  box-shadow:0 10px 40px rgba(0,0,0,0.5);
+}
+
+.pedido-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  padding-bottom:20px;
+  border-bottom:1px solid rgba(212,175,55,0.2);
+}
+
+.pedido-mesa{
+  font-family:'Playfair Display',serif;
+  font-size:26px;
+  color:#d4af37;
+  font-weight:600;
+  letter-spacing:2px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.pedido-mesa::before{
+  content:"🍽️";
+  font-size:28px;
+}
+
+.pedido-hora{
+  color:#888;
+  font-size:13px;
+  letter-spacing:1px;
+  background:rgba(212,175,55,0.1);
+  padding:8px 18px;
+  border-radius:20px;
+  border:1px solid rgba(212,175,55,0.2);
+}
+
+.pedido-lista{
+  margin-bottom:25px;
+  background:rgba(0,0,0,0.3);
+  padding:20px;
+  border-radius:10px;
+}
+
+.lista-item{
+  color:#ddd;
+  padding:12px 15px;
+  margin-bottom:10px;
+  background:rgba(212,175,55,0.05);
+  border-left:4px solid #d4af37;
+  border-radius:6px;
+  font-size:15px;
+  transition:all 0.2s;
+}
+
+.lista-item:hover{
+  background:rgba(212,175,55,0.1);
+  transform:translateX(5px);
+}
+
+.lista-item:last-child{
+  margin-bottom:0;
+}
+
+.pedido-actions{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:14px 28px;
+  border:none;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  flex:1;
+  min-width:150px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+.btn-entregado{
+  background:linear-gradient(135deg,#2ecc71,#27ae60);
+  color:white;
+  box-shadow:0 4px 15px rgba(46,204,113,0.3);
+}
+
+.btn-entregado:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 25px rgba(46,204,113,0.5);
+}
+
+.btn-alerta{
+  background:linear-gradient(135deg,#e74c3c,#c0392b);
+  color:white;
+  box-shadow:0 4px 15px rgba(231,76,60,0.3);
+}
+
+.btn-alerta:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 25px rgba(231,76,60,0.5);
+  animation:pulse 0.5s ease;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+}
+
+/* TARJETAS DE PEDIDOS COMPLETADOS */
+.pedido-completado{
+  background:linear-gradient(135deg,rgba(0,100,50,0.2),rgba(0,80,40,0.3));
+  border:2px solid rgba(0,255,100,0.3);
+  border-radius:14px;
+  padding:25px 30px;
+  margin-bottom:15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  transition:all 0.3s ease;
+  animation:fadeIn 0.5s ease;
+}
+
+.pedido-completado:hover{
+  background:linear-gradient(135deg,rgba(0,120,60,0.3),rgba(0,100,50,0.4));
+  border-color:rgba(0,255,100,0.5);
+  transform:translateX(5px);
+  box-shadow:0 5px 25px rgba(0,255,100,0.2);
+}
+
+.pedido-info{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  flex:1;
+}
+
+.pedido-icono{
+  font-size:32px;
+  filter:drop-shadow(0 0 10px rgba(0,255,100,0.5));
+}
+
+.pedido-mesa-nombre{
+  font-family:'Playfair Display',serif;
+  font-size:22px;
+  color:#00ff88;
+  font-weight:600;
+  letter-spacing:1px;
+}
+
+.pedido-badge{
+  background:rgba(0,255,100,0.2);
+  color:#00ff88;
+  padding:5px 14px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
+  margin-left:12px;
+  border:1px solid rgba(0,255,100,0.3);
+}
+
+.pedido-detalles{
+  background:rgba(0,0,0,0.4);
+  padding:15px 20px;
+  border-radius:8px;
+  margin-top:15px;
+  font-size:14px;
+  color:#ccc;
+  display:none;
+  border-left:3px solid #00ff88;
+}
+
+.pedido-completado.expandido .pedido-detalles{
+  display:block;
+  animation:slideDown 0.3s ease;
+}
+
+@keyframes slideDown{
+  from{opacity:0;transform:translateY(-10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.pedido-actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.btn-icono{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  border:2px solid rgba(0,255,100,0.5);
+  background:transparent;
+  color:#00ff88;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  transition:all 0.3s;
+}
+
+.btn-icono:hover{
+  background:rgba(0,255,100,0.2);
+  transform:scale(1.1) rotate(90deg);
+}
+
+.btn-eliminar-completado{
+  background:rgba(255,0,0,0.15);
+  border:2px solid rgba(255,0,0,0.4);
+  color:#ff6666;
+  padding:10px 20px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:600;
+  transition:all 0.3s;
+  letter-spacing:1px;
+}
+
+.btn-eliminar-completado:hover{
+  background:rgba(255,0,0,0.3);
+  border-color:rgba(255,0,0,0.7);
+  transform:translateY(-2px);
+}
+
+/* MODAL ELEGANTE */
+.modal-overlay{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.8);
+  backdrop-filter:blur(8px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10000;
+  opacity:0;
+  visibility:hidden;
+  transition:all 0.3s ease;
+}
+
+.modal-overlay.active{
+  opacity:1;
+  visibility:visible;
+}
+
+.modal-content{
+  background:linear-gradient(135deg,#1a1a1a,#0f0f0f);
+  border:2px solid rgba(212,175,55,0.4);
+  border-radius:24px;
+  padding:50px 60px;
+  text-align:center;
+  box-shadow:0 25px 80px rgba(0,0,0,0.6),0 0 60px rgba(212,175,55,0.2);
+  transform:scale(0.8) translateY(30px);
+  transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  max-width:500px;
+  width:90%;
+}
+
+.modal-overlay.active .modal-content{
+  transform:scale(1) translateY(0);
+}
+
+.modal-icon{
+  font-size:70px;
+  margin-bottom:25px;
+  display:block;
+  animation:checkmark 0.6s ease 0.2s both;
+}
+
+@keyframes checkmark{
+  0%{transform:scale(0) rotate(-45deg);opacity:0;}
+  50%{transform:scale(1.2) rotate(5deg);}
+  100%{transform:scale(1) rotate(0deg);opacity:1;}
+}
+
+.modal-title{
+  font-family:'Playfair Display',serif;
+  font-size:32px;
+  color:#d4af37;
+  margin-bottom:15px;
+  letter-spacing:2px;
+}
+
+.modal-message{
+  color:#aaa;
+  font-size:16px;
+  margin-bottom:30px;
+  line-height:1.6;
+}
+
+.modal-btn{
+  background:linear-gradient(135deg,#d4af37,#f4d03f);
+  color:#0a0a0a;
+  border:none;
+  padding:16px 50px;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  transition:all 0.3s;
+  box-shadow:0 5px 20px rgba(212,175,55,0.3);
+}
+
+.modal-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 30px rgba(212,175,55,0.5);
+}
+
+/* ESTADO DE CONEXION */
+.connection-status{
+  position:fixed;
+  top:20px;
+  right:20px;
+  padding:10px 20px;
+  border-radius:25px;
+  font-size:12px;
+  font-weight:600;
+  z-index:10000;
+  letter-spacing:1px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+  transition:all 0.3s;
+}
+
+.connected{
+  background:rgba(46,204,113,0.95);
+  color:white;
+}
+
+.disconnected{
+  background:rgba(231,76,60,0.95);
+  color:white;
+}
+
+/* ANIMACIONES GENERALES */
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+@keyframes fadeInUp{
+  from{
+    opacity:0;
+    transform:translateY(30px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes fadeInDown{
+  from{
+    opacity:0;
+    transform:translateY(-30px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.alerta{
+  animation:flash-luxury 0.4s alternate 4;
+}
+
+@keyframes flash-luxury{
+  from{background:rgba(10,10,10,0.95);}
+  to{background:rgba(30,15,15,0.95);}
+}
+
+/* RESPONSIVE DESIGN */
 @media(max-width:1024px){
-  .container{flex-direction:column}
-  .left{min-height:300px;border-right:none;border-bottom:1px solid rgba(212,175,55,0.2);padding:30px 20px}
-  .branding h1{font-size:40px;letter-spacing:4px}
-  .branding span{font-size:36px}
-  .branding-icon{font-size:50px}
-  .right{padding:30px 20px}
-  .header-sistema h2{font-size:30px}
+  .container{flex-direction:column;}
+  .left{
+    min-height:350px;
+    border-right:none;
+    border-bottom:2px solid rgba(212,175,55,0.3);
+    padding:40px 30px;
+  }
+  .branding h1{font-size:44px;letter-spacing:6px;}
+  .branding span{font-size:40px;}
+  .branding-icon{font-size:65px;}
+  .right{padding:40px 30px;}
+  .header-sistema h2{font-size:36px;}
 }
 
 @media(max-width:768px){
-  .left{min-height:250px;padding:25px 15px}
-  .branding h1{font-size:32px;letter-spacing:3px}
-  .branding span{font-size:30px}
-  .branding-icon{font-size:45px;margin-bottom:12px}
-  .branding-tagline{font-size:11px;letter-spacing:2px;padding:10px 20px}
-  .right{padding:25px 15px}
-  .header-sistema h2{font-size:26px}
-  .header-sistema p{font-size:12px}
-  .contador{padding:12px 25px;font-size:14px}
-  .contador-numero{width:36px;height:36px;font-size:14px}
-  .form-group{padding:25px 20px}
-  select,textarea{padding:12px 15px;font-size:13px}
-  .btn-enviar{padding:15px;font-size:14px}
-  .titulo-seccion{font-size:20px}
-  .pedido-mesa{font-size:18px}
-  .pedido-pendiente{padding:20px 15px}
-  .pedido-completado{padding:15px;flex-direction:column;align-items:flex-start;gap:12px}
-  .pedido-actions{width:100%;justify-content:flex-end}
+  .left{min-height:300px;padding:30px 20px;}
+  .branding h1{font-size:36px;letter-spacing:4px;}
+  .branding span{font-size:34px;}
+  .branding-icon{font-size:55px;margin-bottom:15px;}
+  .branding-tagline{font-size:12px;letter-spacing:3px;padding:12px 25px;}
+  .right{padding:30px 20px;}
+  .header-sistema h2{font-size:30px;}
+  .header-sistema p{font-size:13px;}
+  .contador{padding:15px 30px;font-size:15px;}
+  .contador-numero{width:45px;height:45px;font-size:18px;}
+  .form-group{padding:30px 25px;}
+  select,textarea{padding:15px 20px;font-size:14px;}
+  .btn-enviar{padding:18px;font-size:15px;}
+  .titulo-seccion{font-size:24px;}
+  .pedido-mesa{font-size:22px;}
+  .pedido-pendiente{padding:25px 20px;}
+  .pedido-completado{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:15px;
+    padding:20px;
+  }
+  .pedido-actions{width:100%;justify-content:flex-end;}
+  .modal-content{padding:40px 35px;}
+  .modal-title{font-size:26px;}
 }
 
 @media(max-width:480px){
-  .left{min-height:220px;padding:20px 12px}
-  .branding h1{font-size:26px;letter-spacing:2px}
-  .branding span{font-size:26px}
-  .branding-icon{font-size:40px}
-  .branding-tagline{font-size:10px;letter-spacing:2px;padding:8px 15px}
-  .right{padding:20px 12px}
-  .header-sistema h2{font-size:22px}
-  .header-sistema p{font-size:11px;letter-spacing:1px}
-  .contador{padding:10px 20px;font-size:13px;gap:10px}
-  .contador-numero{width:32px;height:32px;font-size:13px}
-  .form-group{padding:20px 15px;margin-bottom:25px}
-  .form-row{margin-bottom:15px}
-  .form-group label{font-size:10px;letter-spacing:1px}
-  select,textarea{padding:10px 12px;font-size:13px}
-  .btn-enviar{padding:13px;font-size:13px;letter-spacing:1px}
-  .titulo-seccion{font-size:18px;margin-bottom:15px}
-  .btn-vaciar{padding:10px 20px;font-size:11px;max-width:100%}
-  .pedido-pendiente{padding:15px 12px;margin-bottom:12px}
-  .pedido-header{flex-direction:column;align-items:flex-start;gap:8px;margin-bottom:10px;padding-bottom:10px}
-  .pedido-mesa{font-size:16px}
-  .pedido-hora{font-size:11px;padding:3px 10px}
-  .lista-item{padding:6px 10px;font-size:13px;margin-bottom:5px}
-  .pedido-actions{gap:8px;flex-direction:column;width:100%}
-  .pedido-actions .btn{width:100%}
-  .btn{padding:8px 15px;font-size:11px}
-  .pedido-completado{padding:12px}
-  .pedido-mesa-nombre{font-size:16px}
-  .pedido-badge{font-size:10px;padding:3px 8px}
-  .pedido-icono{font-size:18px}
-  .btn-icono{width:32px;height:32px;font-size:14px}
-  .btn-eliminar-completado{padding:5px 10px;font-size:10px}
+  .left{min-height:280px;padding:25px 15px;}
+  .branding h1{font-size:28px;letter-spacing:3px;}
+  .branding span{font-size:28px;}
+  .branding-icon{font-size:45px;}
+  .branding-tagline{font-size:11px;letter-spacing:2px;padding:10px 20px;}
+  .right{padding:25px 15px;}
+  .header-sistema h2{font-size:24px;}
+  .header-sistema p{font-size:12px;letter-spacing:2px;}
+  .contador{padding:12px 25px;font-size:14px;gap:15px;}
+  .contador-numero{width:40px;height:40px;font-size:16px;}
+  .form-group{padding:25px 20px;margin-bottom:30px;}
+  .form-row{margin-bottom:20px;}
+  .form-group label{font-size:11px;letter-spacing:2px;}
+  select,textarea{padding:14px 18px;font-size:14px;}
+  .btn-enviar{padding:16px;font-size:14px;letter-spacing:2px;}
+  .titulo-seccion{font-size:20px;margin-bottom:25px;}
+  .btn-vaciar{padding:12px 25px;font-size:11px;max-width:100%;}
+  .pedido-pendiente{padding:20px 15px;margin-bottom:15px;}
+  .pedido-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:15px;
+    padding-bottom:15px;
+  }
+  .pedido-mesa{font-size:20px;}
+  .pedido-hora{font-size:12px;padding:6px 14px;}
+  .lista-item{padding:10px 12px;font-size:14px;margin-bottom:8px;}
+  .pedido-actions{gap:10px;flex-direction:column;width:100%;}
+  .pedido-actions .btn{width:100%;min-width:100%;}
+  .btn{padding:12px 20px;font-size:12px;}
+  .pedido-completado{padding:18px 15px;}
+  .pedido-mesa-nombre{font-size:18px;}
+  .pedido-badge{font-size:11px;padding:4px 10px;}
+  .pedido-icono{font-size:28px;}
+  .btn-icono{width:40px;height:40px;font-size:16px;}
+  .btn-eliminar-completado{padding:8px 16px;font-size:11px;}
+  .modal-content{padding:35px 25px;}
+  .modal-icon{font-size:60px;}
+  .modal-title{font-size:24px;}
+  .modal-message{font-size:14px;}
+  .modal-btn{padding:14px 40px;font-size:14px;}
 }
 </style>
 </head>
 <body>
 <div class="decor-top"></div>
 <div id="connectionStatus" class="connection-status disconnected">Conectando...</div>
+
+<!-- MODAL ELEGANTE -->
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal-content">
+    <span class="modal-icon">✅</span>
+    <h3 class="modal-title">¡Pedido Enviado!</h3>
+    <p class="modal-message">El pedido ha sido enviado exitosamente a cocina</p>
+    <button class="modal-btn" onclick="cerrarModal()">Aceptar</button>
+  </div>
+</div>
+
 <div class="container">
     <div class="left">
         <div class="branding">
@@ -175,7 +898,7 @@ select:focus,textarea:focus{border-color:#d4af37;outline:none}
             </div>
             <div class="form-row">
                 <label>Detalle del Pedido</label>
-                <textarea id="pedido" rows="4" placeholder="Ej: Pizza Margarita&#10;Coca-Cola&#10;Galletas"></textarea>
+                <textarea id="pedido" rows="4" placeholder="Ej:&#10;Pizza Margarita&#10;Coca-Cola&#10;Galletas con Chocolate"></textarea>
             </div>
             <button class="btn-enviar" onclick="enviarPedido()">✦ Enviar Pedido</button>
         </div>
@@ -218,6 +941,22 @@ let sonido = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.
 let ultimoPedidoId = null;
 let ultimaAlertaTime = 0;
 
+// MODAL FUNCTIONS
+function mostrarModal(){
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function cerrarModal(){
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+
+// Cerrar modal al hacer click fuera
+document.getElementById('modalOverlay').addEventListener('click', function(e){
+  if(e.target === this){
+    cerrarModal();
+  }
+});
+
 // 🔔 Reproducir sonido de alerta
 function reproducirAlerta(){
   console.log("🔊 Reproduciendo alerta");
@@ -248,7 +987,10 @@ function dispararAlertaGlobal(){
 function enviarPedido(){
   const mesa = document.getElementById("mesa").value;
   const texto = document.getElementById("pedido").value;
-  if(texto.trim()===""){ alert("Escribe el pedido"); return; }
+  if(texto.trim()===""){ 
+    alert("Por favor, escribe el detalle del pedido"); 
+    return; 
+  }
   
   const items = texto.split(/[\n,]+/).map(x=>x.trim()).filter(x=>x.length>0);
   
@@ -260,7 +1002,7 @@ function enviarPedido(){
     estado: "pendiente"
   }).then(() => {
     document.getElementById("pedido").value = "";
-    alert("✅ Pedido enviado a cocina");
+    mostrarModal(); // Usar modal elegante en lugar de alert
   }).catch(e => {
     console.error("Error:", e);
     alert("❌ Error de conexión");
@@ -310,7 +1052,7 @@ function renderPendientes(lista){
   let count = 0;
   
   if(lista.length === 0){
-    cont.innerHTML = "<p style='color:#666;text-align:center;padding:20px'>No hay pedidos pendientes</p>";
+    cont.innerHTML = "<p style='color:#666;text-align:center;padding:40px;font-size:16px'>No hay pedidos pendientes</p>";
     document.getElementById("contadorPendientes").innerText = "0";
     return;
   }
@@ -325,7 +1067,7 @@ function renderPendientes(lista){
     div.innerHTML = `
       <div class="pedido-header">
         <span class="pedido-mesa">${p.mesa}</span>
-        <span class="pedido-hora">${p.hora}</span>
+        <span class="pedido-hora">🕐 ${p.hora}</span>
       </div>
       <div class="pedido-lista">
         ${p.items.map(i=>`<div class="lista-item">• ${i}</div>`).join('')}
@@ -353,7 +1095,7 @@ function renderEntregados(lista){
   }
   
   if(lista.length === 0){
-    cont.innerHTML = "<p style='color:#666;text-align:center;padding:20px'>No hay pedidos completados</p>";
+    cont.innerHTML = "<p style='color:#666;text-align:center;padding:40px;font-size:16px'>No hay pedidos completados</p>";
     return;
   }
   
@@ -369,13 +1111,13 @@ function renderEntregados(lista){
         <span class="pedido-icono">🍽️</span>
         <div>
           <span class="pedido-mesa-nombre">${p.mesa}</span>
-          <span class="pedido-badge">${p.items.length} pedido${p.items.length>1?'s':''}</span>
+          <span class="pedido-badge">${p.items.length} item${p.items.length>1?'s':''}</span>
         </div>
       </div>
       <div class="pedido-detalles">
-        <strong>Detalle:</strong><br>
+        <strong style="color:#00ff88;margin-bottom:10px;display:block;">Detalle del Pedido:</strong>
         ${p.items.map(i=>`• ${i}`).join('<br>')}<br><br>
-        <small>Hora: ${p.hora} | Completado: ${p.fechaCompletado || 'N/A'}</small>
+        <small style="color:#888;">🕐 Hora: ${p.hora} | ✅ Completado: ${p.fechaCompletado || 'N/A'}</small>
       </div>
       <div class="pedido-actions">
         <button class="btn-icono" onclick="this.closest('.pedido-completado').classList.toggle('expandido')" title="Ver detalles">▶</button>

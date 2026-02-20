@@ -1440,7 +1440,7 @@ function enviarPedidoWhatsApp(mesa, items, total) {
     const mensajeCodificado = encodeURIComponent(mensaje);
     
     // Usar API oficial de WhatsApp que funciona en todos los dispositivos
-    const urlWhatsApp = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${mensajeCodificado}`;
+  const urlWhatsApp = `https://wa.me/${WHATSAPP_NUMBER}?text=${mensajeCodificado}`;
     
     // Abrir en nueva pestaña/ventana
     window.open(urlWhatsApp, '_blank');
@@ -1972,5 +1972,4 @@ console.log("🚀 Sistema cargado con WhatsApp Automático. Número: +51 947 683
 </script>
 </body>
 </html>
-
 

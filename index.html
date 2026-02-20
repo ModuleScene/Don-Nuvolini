@@ -1186,12 +1186,10 @@ color:white;
 <div id="connectionStatus" class="connection-status disconnected">Conectando...</div>
 <div id="modalOverlay" class="modal-overlay">
 <div class="modal-content">
-<span class="modal-icon">📱</span>
+<span class="modal-icon">✅</span>
 <h3 class="modal-title">¡Pedido Enviado!</h3>
 <p class="modal-message">
-<strong>WhatsApp se abrió en otra ventana</strong><br><br>
-1️⃣ Envía el mensaje en WhatsApp<br>
-2️⃣ Vuelve a esta pestaña<br><br>
+<strong>El pedido ha sido registrado</strong><br><br>
 El pedido ya está guardado en el sistema ✅
 </p>
 <button class="modal-btn" onclick="cerrarModal()">✅ Entendido</button>
@@ -1338,9 +1336,6 @@ const pendientesRef=db.ref('pedidosPendientes');
 const entregadosRef=db.ref('pedidosEntregados');
 const alertasRef=db.ref('alertas');
 
-// 📱 CONFIGURACIÓN DE WHATSAPP - NÚMERO DE LA DUEÑA
-const WHATSAPP_NUMBER = "51947683680"; // Perú +51 947 683 680
-
 // MENU COMPLETO CON PRECIOS - INCLUYENDO COMBOS
 const menuProductos={
 combos:[
@@ -1412,39 +1407,11 @@ bebidas:[
 {name:"Extra Ingredientes",price:6}
 ]
 };
-
 let categoriaActual='combos';
 let pedidoActual=[];
 let sonido=new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
 let ultimoPedidoId=null;
 let ultimaAlertaTime=0;
-
-// 📱 FUNCIÓN PARA ENVIAR PEDIDO POR WHATSAPP (COMPATIBLE CON MÓVILES)
-function enviarPedidoWhatsApp(mesa, items, total) {
-    let mensaje = `🍕 *NUEVO PEDIDO - DON NUVOLINI*\n\n`;
-    mensaje += `📍 *Mesa:* ${mesa}\n`;
-    mensaje += `⏰ *Hora:* ${new Date().toLocaleTimeString()}\n`;
-    mensaje += `📅 *Fecha:* ${new Date().toLocaleDateString()}\n\n`;
-    mensaje += `📋 *Detalle del Pedido:*\n`;
-    mensaje += `━━━━━━━━━━━━━━━━━━━━\n`;
-    
-    items.forEach((item, index) => {
-        mensaje += `${index + 1}. ${item}\n`;
-    });
-    
-    mensaje += `━━━━━━━━━━━━━━━━━━━━\n`;
-    mensaje += `\n💰 *TOTAL A COBRAR:* S/ ${total.toFixed(2)}\n`;
-    mensaje += `\n✅ *Estado:* Pendiente de atención`;
-    mensaje += `\n\n🙏 *Gracias por su preferencia*`;
-    
-    const mensajeCodificado = encodeURIComponent(mensaje);
-    
-    // Usar API oficial de WhatsApp que funciona en todos los dispositivos
-  const urlWhatsApp = `https://wa.me/${WHATSAPP_NUMBER}?text=${mensajeCodificado}`;
-    
-    // Abrir en nueva pestaña/ventana
-    window.open(urlWhatsApp, '_blank');
-}
 
 // 🔍 FUNCION DE BUSQUEDA
 function buscarProductos(){
@@ -1476,7 +1443,6 @@ noResults.classList.add('show');
 noResults.classList.remove('show');
 }
 }
-
 function cambiarCategoria(categoria){
 categoriaActual=categoria;
 document.querySelectorAll('.category-tab').forEach(tab=>tab.classList.remove('active'));
@@ -1484,7 +1450,6 @@ event.target.closest('.category-tab').classList.add('active');
 document.getElementById('searchBox').value='';
 renderizarProductos();
 }
-
 function renderizarProductos(){
 const grid=document.getElementById('productsGrid');
 grid.innerHTML='';
@@ -1529,7 +1494,6 @@ grid.appendChild(card);
 }
 });
 }
-
 function agregarAlPedido(nombre,precio){
 const existente=pedidoActual.find(item=>item.nombre===nombre);
 if(existente){
@@ -1539,12 +1503,10 @@ pedidoActual.push({nombre,precio,cantidad:1});
 }
 renderizarPedidoActual();
 }
-
 function removerDelPedido(index){
 pedidoActual.splice(index,1);
 renderizarPedidoActual();
 }
-
 function cambiarCantidad(index,delta){
 pedidoActual[index].cantidad+=delta;
 if(pedidoActual[index].cantidad<=0){
@@ -1552,7 +1514,6 @@ pedidoActual.splice(index,1);
 }
 renderizarPedidoActual();
 }
-
 function renderizarPedidoActual(){
 const container=document.getElementById('orderItemsContainer');
 const totalDiv=document.getElementById('orderTotal');
@@ -1589,17 +1550,12 @@ totalDiv.textContent=`Total: S/ ${total.toFixed(2)}`;
 totalDiv.style.display='block';
 btnSend.disabled=false;
 }
-
 function enviarPedidoModern(){
 if(pedidoActual.length===0)return;
 const mesa=document.getElementById('mesaSelector').value;
 const items=pedidoActual.map(item=>`${item.nombre} (x${item.cantidad})`);
 const total=pedidoActual.reduce((sum,item)=>sum+(item.precio*item.cantidad),0);
 const fechaHoy=new Date().toISOString().split('T')[0];
-
-// 📱 ENVIAR AUTOMÁTICAMENTE POR WHATSAPP
-enviarPedidoWhatsApp(mesa, items, total);
-
 // Guardar en Firebase
 pendientesRef.push({
 mesa:mesa,
@@ -1618,11 +1574,9 @@ console.error("Error:",e);
 alert("❌ Error de conexión");
 });
 }
-
 function mostrarModal(){document.getElementById('modalOverlay').classList.add('active');}
 function cerrarModal(){document.getElementById('modalOverlay').classList.remove('active');}
 document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)cerrarModal();});
-
 function reproducirAlerta(){
 console.log("🔊 Reproduciendo alerta");
 sonido.currentTime=0;
@@ -1631,7 +1585,6 @@ if(navigator.vibrate)navigator.vibrate([300,200,300]);
 document.body.classList.add("alerta");
 setTimeout(()=>document.body.classList.remove("alerta"),1500);
 }
-
 function dispararAlertaGlobal(){
 const id='alerta_'+Date.now();
 console.log("📡 Disparando alerta global:",id);
@@ -1640,7 +1593,6 @@ console.log("✅ Alerta escrita en Firebase");
 setTimeout(()=>alertasRef.child(id).remove(),2000);
 }).catch(e=>console.error("❌ Error al escribir alerta:",e));
 }
-
 function calcularTotalPedido(items){
 let total=0;
 items.forEach(item=>{
@@ -1664,7 +1616,6 @@ if(!encontrado)total+=5;
 });
 return total;
 }
-
 function extraerNombreProducto(item){
 for(const cat of Object.values(menuProductos)){
 for(const prod of cat){
@@ -1673,7 +1624,6 @@ if(item.toLowerCase().includes(prod.name.toLowerCase()))return prod.name;
 }
 return item.split('-')[0].trim();
 }
-
 function marcarEntregado(id){
 console.log("🔄 Marcando pedido como entregado:",id);
 pendientesRef.child(id).once('value').then(snapshot=>{
@@ -1697,19 +1647,16 @@ generarReporte();
 }
 });
 }
-
 function eliminarEntregado(id){
 if(confirm("¿Eliminar este pedido del historial?")){
 entregadosRef.child(id).remove().then(()=>generarReporte());
 }
 }
-
 function vaciarEntregados(){
 if(confirm("¿Estás seguro de limpiar TODO el historial?")){
 entregadosRef.remove().then(()=>{console.log("🗑 Historial limpiado");generarReporte();});
 }
 }
-
 function renderPendientes(lista){
 const cont=document.getElementById("listaPendientes");
 const contador=document.getElementById("contadorPendientes");
@@ -1744,7 +1691,6 @@ ${p.items.map(i=>`<div class="lista-item">• ${i}</div>`).join('')}
 cont.appendChild(div);
 });
 }
-
 function renderEntregados(lista){
 console.log("📊 Renderizando completados. Total:",lista.length);
 const cont=document.getElementById("listaEntregados");
@@ -1786,7 +1732,6 @@ ${p.items.map(i=>`• ${i}`).join('<br>')}<br><br>
 cont.appendChild(div);
 });
 }
-
 function generarReporte(){
 const filtro=document.getElementById('filtroFecha').value;
 const ahora=new Date();
@@ -1823,7 +1768,6 @@ renderTablaVentas(ventas);
 renderProductosVendidos(productosVendidos);
 });
 }
-
 function renderResumen(totalVentas,totalPedidos,productosVendidos){
 const ticketPromedio=totalPedidos>0?totalVentas/totalPedidos:0;
 document.getElementById('totalVentas').innerText=`S/ ${totalVentas.toFixed(2)}`;
@@ -1831,7 +1775,6 @@ document.getElementById('totalPedidos').innerText=totalPedidos;
 document.getElementById('totalProductos').innerText=Object.keys(productosVendidos).length;
 document.getElementById('ticketPromedio').innerText=`S/ ${ticketPromedio.toFixed(2)}`;
 }
-
 function renderTablaVentas(ventas){
 const cuerpo=document.getElementById('cuerpoVentas');
 if(ventas.length===0){cuerpo.innerHTML=`<tr><td colspan="4" class="tabla-vacia">No hay ventas en este período</td></tr>`;return;}
@@ -1844,7 +1787,6 @@ cuerpo.innerHTML=ventas.map(v=>`
 </tr>
 `).join('');
 }
-
 function renderProductosVendidos(productosVendidos){
 const cont=document.getElementById('listaProductosVendidos');
 const productosOrdenados=Object.entries(productosVendidos).sort((a,b)=>b[1]-a[1]).slice(0,10);
@@ -1856,7 +1798,6 @@ cont.innerHTML=productosOrdenados.map(([nombre,cantidad],index)=>`
 </div>
 `).join('');
 }
-
 function exportarCSV(){
 const filtro=document.getElementById('filtroFecha').value;
 let fechaInicio=null;
@@ -1892,7 +1833,6 @@ document.body.removeChild(link);
 mostrarModalExportado();
 });
 }
-
 function mostrarModalExportado(){
 const modal=document.getElementById('modalOverlay');
 const content=modal.querySelector('.modal-content');
@@ -1904,14 +1844,12 @@ content.innerHTML=`
 `;
 modal.classList.add('active');
 }
-
 pendientesRef.on('value',snapshot=>{
 const lista=[];
 snapshot.forEach(child=>lista.push(child));
 console.log("📋 Pedidos pendientes:",lista.length);
 renderPendientes(lista);
 });
-
 entregadosRef.on('value',snapshot=>{
 const lista=[];
 snapshot.forEach(child=>{
@@ -1922,7 +1860,6 @@ console.log("✅ Total pedidos completados en Firebase:",lista.length);
 renderEntregados(lista);
 generarReporte();
 });
-
 pendientesRef.on('child_added',s=>{
 if(ultimoPedidoId&&s.key!==ultimoPedidoId){
 console.log("🔔 Nuevo pedido detectado, alertando...");
@@ -1930,7 +1867,6 @@ reproducirAlerta();
 }
 ultimoPedidoId=s.key;
 });
-
 alertasRef.on('child_added',s=>{
 const data=s.val();
 const ahora=Date.now();
@@ -1942,7 +1878,6 @@ console.log("🌍 Alerta global recibida:",data);
 ultimaAlertaTime=ahora;
 reproducirAlerta();
 });
-
 db.ref('.info/connected').on('value',s=>{
 const el=document.getElementById("connectionStatus");
 if(s.val()===true){
@@ -1953,7 +1888,6 @@ el.className="connection-status disconnected";
 el.innerText="● Desconectado";
 }
 });
-
 document.addEventListener('click',()=>{
 console.log("🎵 Habilitando audio...");
 sonido.play().then(()=>{
@@ -1962,14 +1896,11 @@ sonido.currentTime=0;
 console.log("✅ Audio preparado");
 }).catch(e=>console.log("⚠ Audio pendiente de interacción:",e.message));
 },{once:true});
-
 document.addEventListener('DOMContentLoaded',()=>{
 renderizarProductos();
 generarReporte();
 });
-
-console.log("🚀 Sistema cargado con WhatsApp Automático. Número: +51 947 683 680");
+console.log("🚀 Sistema cargado correctamente.");
 </script>
 </body>
 </html>
-

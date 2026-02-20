@@ -216,17 +216,18 @@ box-shadow:0 3px 15px rgba(212,175,55,0.4);
 .category-tab i{
 font-size:14px;
 }
+/* PRODUCTS GRID - MENU MÁS GRANDE */
 .products-grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-gap:12px;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:15px;
 margin-bottom:25px;
 }
 .product-card{
 background:linear-gradient(135deg,rgba(30,30,30,0.95),rgba(20,20,20,0.98));
 border:2px solid rgba(212,175,55,0.2);
 border-radius:12px;
-padding:15px;
+padding:18px;
 transition:all 0.3s ease;
 position:relative;
 overflow:hidden;
@@ -257,9 +258,9 @@ background:linear-gradient(135deg,rgba(231,76,60,0.1),rgba(30,30,30,0.95));
 }
 .product-name{
 font-family:'Playfair Display',serif;
-font-size:14px;
+font-size:15px;
 color:#fff;
-margin-bottom:5px;
+margin-bottom:6px;
 font-weight:600;
 line-height:1.3;
 }
@@ -271,18 +272,18 @@ letter-spacing:1px;
 margin-bottom:8px;
 }
 .product-price{
-font-size:16px;
+font-size:17px;
 color:#d4af37;
 font-weight:700;
-margin-bottom:10px;
+margin-bottom:12px;
 }
 .product-card.promo .product-price{
 color:#e74c3c;
-font-size:18px;
+font-size:19px;
 }
 .btn-add-product{
 width:100%;
-padding:8px;
+padding:10px;
 background:transparent;
 border:2px solid rgba(212,175,55,0.4);
 border-radius:6px;
@@ -1147,8 +1148,8 @@ color:white;
 .right{padding:18px 12px;}
 .header-sistema h2{font-size:20px;}
 .header-sistema p{font-size:10px;letter-spacing:1px;}
-.product-card{padding:12px;}
-.product-name{font-size:12px;}
+.product-card{padding:15px;}
+.product-name{font-size:14px;}
 .order-section{padding:15px;}
 .current-order{padding:12px;}
 .btn-send-order{padding:12px;font-size:11px;}
@@ -1185,10 +1186,15 @@ color:white;
 <div id="connectionStatus" class="connection-status disconnected">Conectando...</div>
 <div id="modalOverlay" class="modal-overlay">
 <div class="modal-content">
-<span class="modal-icon">✅</span>
+<span class="modal-icon">📱</span>
 <h3 class="modal-title">¡Pedido Enviado!</h3>
-<p class="modal-message">El pedido ha sido enviado exitosamente a cocina y notificado por WhatsApp</p>
-<button class="modal-btn" onclick="cerrarModal()">Aceptar</button>
+<p class="modal-message">
+<strong>WhatsApp se abrió en otra pestaña/app</strong><br><br>
+1️⃣ Envía el mensaje en WhatsApp<br>
+2️⃣ Vuelve a esta pestaña<br><br>
+El pedido ya está guardado en el sistema ✅
+</p>
+<button class="modal-btn" onclick="cerrarModal()">✅ Entendido</button>
 </div>
 </div>
 <div class="container">
@@ -1413,7 +1419,7 @@ let sonido=new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.og
 let ultimoPedidoId=null;
 let ultimaAlertaTime=0;
 
-// 📱 FUNCIÓN PARA ENVIAR PEDIDO POR WHATSAPP
+// 📱 FUNCIÓN PARA ENVIAR PEDIDO POR WHATSAPP (ABRE APP DIRECTAMENTE)
 function enviarPedidoWhatsApp(mesa, items, total) {
     let mensaje = `🍕 *NUEVO PEDIDO - DON NUVOLINI*\n\n`;
     mensaje += `📍 *Mesa:* ${mesa}\n`;
@@ -1434,11 +1440,30 @@ function enviarPedidoWhatsApp(mesa, items, total) {
     // Codificar mensaje para URL
     const mensajeCodificado = encodeURIComponent(mensaje);
     
-    // Crear URL de WhatsApp
-    const urlWhatsApp = `https://wa.me/${WHATSAPP_NUMBER}?text=${mensajeCodificado}`;
+    // Detectar si es móvil o desktop
+    const esMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
-    // Abrir WhatsApp en nueva pestaña
-    window.open(urlWhatsApp, '_blank');
+    let urlWhatsApp;
+    
+    if (esMovil) {
+        // En móvil: usar protocolo whatsapp:// para abrir la APP directamente
+        urlWhatsApp = `whatsapp://send?phone=${WHATSAPP_NUMBER}&text=${mensajeCodificado}`;
+        
+        // Intentar abrir la app
+        window.location.href = urlWhatsApp;
+        
+        // Si después de 2 segundos sigue en la página, WhatsApp no está instalado
+        setTimeout(() => {
+            if (confirm('⚠️ WhatsApp no se abrió.\n\n¿Tienes WhatsApp instalado?\n\nPresiona Aceptar para abrir WhatsApp Web o Cancelar para intentar de nuevo.')) {
+                // Abrir WhatsApp Web como fallback
+                window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${mensajeCodificado}`, '_blank');
+            }
+        }, 2000);
+    } else {
+        // En desktop: abrir WhatsApp Web en nueva pestaña
+        urlWhatsApp = `https://wa.me/${WHATSAPP_NUMBER}?text=${mensajeCodificado}`;
+        window.open(urlWhatsApp, '_blank');
+    }
 }
 
 // 🔍 FUNCION DE BUSQUEDA
@@ -1963,7 +1988,7 @@ renderizarProductos();
 generarReporte();
 });
 
-console.log("🚀 Sistema cargado con WhatsApp Automático. Número: +51 939 944 939");
+console.log("🚀 Sistema cargado con WhatsApp Automático. Número: +51 933 043 765");
 </script>
 </body>
 </html>
